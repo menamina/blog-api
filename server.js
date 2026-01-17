@@ -1,7 +1,7 @@
 const express = require("express");
 const session = require("express-session/");
 const passport = require("passport");
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5555;
 const server = express();
 
 server.use(express.json());
@@ -11,6 +11,6 @@ server.listen(port, (error) => {
   if (!error) {
     console.log("active");
   } else {
-    console.log("whomp :(");
+    console.log(`whomp :( @ ${error.message}`);
   }
 });
