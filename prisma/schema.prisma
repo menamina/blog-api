@@ -41,6 +41,7 @@ model Comments {
   userID Int
   postID Int
   comment String
+  createdAt DateTime @default(now())
 
   user User @relation(fields: [userID], references: [id])
   post Posts @relation(fields: [postID], references: [id], onDelete: Cascade)
