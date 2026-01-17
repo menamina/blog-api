@@ -11,11 +11,16 @@ model User {
   name String 
   username String @unique
   email String @unique
-  isReader Boolean @default(true)
+  role Role @default(user)
 
   posts Posts[]
   userComments Comments[]
 
+}
+
+enum Role {
+  admin
+  user
 }
 
 model Posts {
