@@ -11,6 +11,7 @@ model User {
   name String 
   username String @unique
   email String @unique
+  saltedHash String
   role Role @default(user)
 
   posts Posts[]
