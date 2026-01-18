@@ -1,4 +1,4 @@
-import { body, param, validationResult } from "express-validator";
+const { body, validationResult } = require("express-validator");
 
 const signUpValidator = [
   body("name").notEmpty().withMessage("Name is required"),
@@ -33,11 +33,11 @@ const signUpValidator = [
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.json({ errors: errors.array });
+      return res.json({ errors: errors.array() });
     } else {
       next();
     }
   },
 ];
 
-module.exports = validateSignUp;
+module.exports = { signUpValidator };

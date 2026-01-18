@@ -1,4 +1,4 @@
-const prisma = require("../prisma/client");
+const prisma = require("../../prisma/client");
 
 async function checkDBForUser(req, res, next) {
   try {
@@ -12,21 +12,19 @@ async function checkDBForUser(req, res, next) {
     });
 
     if (userNameTaken) {
-      res.json({
+      return res.json({
         userTaken: "username in use",
       });
     } else if (emailTaken) {
-      res.json({
+      return res.json({
         emailTaken: "email in use",
       });
     } else {
-      res.status(201).json({
-        message: "continue w registration",
-      });
+      next();
     }
   } catch (error) {
     res.status(500).send("cannot check if user or email is taken");
   }
 }
 
-module.exports = checkDBForUser;
+module.exports = { checkDBForUser };

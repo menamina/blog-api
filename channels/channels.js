@@ -1,8 +1,5 @@
 const prisma = require("../prisma/client");
-const {
-  generatePassword,
-  validatePassword,
-} = require("../config/middleware/passwordUtils");
+const { generatePassword } = require("../config/password/passwordUtils");
 
 async function getPostsAndComments(req, res) {
   try {
