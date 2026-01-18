@@ -1,5 +1,9 @@
 const prisma = require("../prisma/client");
-const { generatePassword } = require("../config/password/passwordUtils");
+const {
+  generatePassword,
+  validatePassword,
+} = require("../config/password/passwordUtils");
+const jwt = require("../config/jwt");
 
 async function getPostsAndComments(req, res) {
   try {
@@ -35,7 +39,7 @@ async function createUser(req, res) {
         saltedHash: saltHash,
       },
     });
-    res.status(201).json({
+    return res.status(201).json({
       message: "User registration successful",
     });
   } catch (error) {
@@ -43,4 +47,35 @@ async function createUser(req, res) {
   }
 }
 
-module.exports = { getPostsAndComments, createUser };
+async function loginUser(req, res) {
+  try {
+    const { email, password } = req.body;
+    const emailFound = await prisma.user.findUnique({
+      where: { email: email },
+    });
+
+    if (!emailFound) {
+      return res.status(401).json({
+        noEmail: "no email found",
+      });
+    } else {
+      const correctPassword = await validatePassword(
+        password,
+        emailFound.saltedHash,
+      );
+      if (!correctPassword) {
+        return res.status(401).json({
+          incorrectPass: "incorrect password",
+        });
+      } else {
+        return res.status(200).json({
+          message: "login successful",
+        });
+      }
+    }
+  } catch (error) {
+    res.status(500).send("error logging in");
+  }
+}
+
+module.exports = { getPostsAndComments, createUser, loginUser };

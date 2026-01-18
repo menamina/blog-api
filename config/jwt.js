@@ -1,1 +1,1 @@
-const jwt = requiore("jsonwebtoken");
+const jwt = require("jsonwebtoken");
