@@ -1,24 +1,19 @@
 const jwt = require("jsonwebtoken");
 
 function verifyToken(req, res, next) {
-  const bearerHeader = req.headers["authorization"];
-  if (typeof bearerHeader !== "undefined") {
-    const token = bearerHeader.split(" ")[1];
-    req.token = token;
-    jwt.verify(token, process.env.JWTSECRET, (err, decoded) => {
-      if (err) {
-        return res.statue(403).json({
-          error: "invalid or expired token",
-        });
-      } else {
-        req.user = decoded;
-        next();
-      }
-    });
+  const token = req.cookies.accessToken;
+  if (!token) {
+    return res.statue(401).json({ error: "you must be logged in" });
   } else {
-    return res.status(403).json({
-      error: "you must login to comment on posts",
-    });
+    try {
+      const decoded = jwt.verify(token, process.env.JWTSECRET);
+      req.user = decoded;
+      next();
+    } catch (error) {
+      return res.status(403).json({
+        error: "invalid or expired token",
+      });
+    }
   }
 }
 

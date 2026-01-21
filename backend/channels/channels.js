@@ -90,7 +90,31 @@ async function loginUser(req, res) {
         });
       } else {
         const jwtToken = token(emailFound);
-        return res.json({ token: jwtToken });
+        const refreshToken = jwt.sign(
+          { id: emailFound.id, email: emailFound.email, role: emailFound.role },
+          process.env.JWTREFRESH,
+          { expiresIn: "7d" },
+        );
+        res.cookie("accessToken", jwtToken, {
+          httpOnly: true,
+          sameSite: "strict",
+          secure: process.env.NODE_ENV === "production",
+          maxAge: 15 * 60 * 1000,
+        });
+
+        res.cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          sameSite: "strict",
+          secure: process.env.NODE_ENV === "production",
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+        return res.json({
+          user: {
+            id: user.id,
+            email: user.email,
+            role: user.role,
+          },
+        });
       }
     }
   } catch (error) {
@@ -185,6 +209,16 @@ async function deleteComments(req, res) {
   }
 }
 
+async function logout(req, res) {
+  try {
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+    return res.json({ success: true });
+  } catch (error) {
+    res.status(500).send("error logging out");
+  }
+}
+
 module.exports = {
   getAllPosts,
   getPostsAndComments,
@@ -195,4 +229,5 @@ module.exports = {
   editPost,
   deletePost,
   deleteComments,
+  logout,
 };

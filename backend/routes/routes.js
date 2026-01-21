@@ -9,10 +9,10 @@ const { verifyToken, isAdmin } = require("../config/middleware/jwtmiddleware");
 // global
 
 router.get("/blog", remote.getPostsAndComments);
-router.get("/api/multerIMG", remote.sendIMGS);
+router.get("/api/multerIMG/:image", remote.sendIMGS);
 router.post("/signup", signUpValidator, checkDBForUser, remote.createUser);
 router.post("/login", remote.loginUser);
-router.post("/logout");
+router.post("/logout", remote.logout);
 
 // user
 router.post("/comments", verifyToken, remote.addComment);

@@ -1,12 +1,11 @@
 const express = require("express");
-const session = require("express-session/");
-const passport = require("passport");
 const port = process.env.PORT || 5555;
 const server = express();
 const routes = require("./routes/routes");
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
+server.use("/uploads", express.static("uploads"));
 
 server.use("/", routes);
 
