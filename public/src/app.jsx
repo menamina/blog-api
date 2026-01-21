@@ -60,7 +60,7 @@ function App() {
       <Nav user={user} setUser={setUser}></Nav>
       <div className="blog holder flex">
         <SideBar></SideBar>
-        <Outlet context={{ posts }}>
+        <Outlet context={{ posts, user }}>
           <Main></Main>
         </Outlet>
       </div>

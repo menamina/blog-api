@@ -8,9 +8,6 @@ const { verifyToken, isAdmin } = require("../config/middleware/jwtmiddleware");
 
 // global
 
-router.get("/api/whoAmINow", verifyToken, remote.checkMyToken);
-router.post("/api/refresh", verifyToken, remote.checkRefreshToken);
-
 router.get("/blog", remote.getPostsAndComments);
 router.get("/api/multerIMG/:image", remote.sendIMGS);
 router.post("/signup", signUpValidator, checkDBForUser, remote.createUser);
@@ -19,6 +16,8 @@ router.post("/logout", remote.logout);
 
 // user
 router.post("/comments", verifyToken, remote.addComment);
+router.get("/api/whoAmINow", verifyToken, remote.checkMyToken);
+router.post("/api/refresh", verifyToken, remote.checkRefreshToken);
 
 // admin
 router.post("/dashboard", verifyToken, isAdmin, remote.getAllPosts);

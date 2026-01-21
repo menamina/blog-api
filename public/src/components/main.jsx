@@ -1,7 +1,7 @@
 import { useOutletContext } from "react-router-dom";
 
 function Main() {
-  const { posts } = useOutletContext;
+  const { posts, user } = useOutletContext;
   return <div className="main"></div>;
 }
 
