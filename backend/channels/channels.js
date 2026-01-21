@@ -209,6 +209,19 @@ async function deleteComments(req, res) {
   }
 }
 
+async function checkMyToken(req, res) {
+  if (!req.user) {
+    return res.status(401).json({ error: "Not authenticated" });
+  }
+  return res.json({
+    id: req.user.id,
+    email: req.user.email,
+    role: req.user.role,
+  });
+}
+
+async function checkRefreshToken(req, res) {}
+
 async function logout(req, res) {
   try {
     res.clearCookie("accessToken");
@@ -230,4 +243,6 @@ module.exports = {
   deletePost,
   deleteComments,
   logout,
+  checkMyToken,
+  checkRefreshToken,
 };
