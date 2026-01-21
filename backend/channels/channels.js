@@ -4,6 +4,17 @@ const {
   validatePassword,
 } = require("../config/password/passwordUtils");
 const { token } = require("../config/jwt");
+const path = require("node:path");
+
+async function sendIMGS(req, res) {
+  try {
+    const imgPath = Number(req.params.image);
+    const imgMulterPath = path.resolve("uploads", imgPath);
+    return res.sendFile(imgMulterPath);
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 
 async function getAllPosts(req, res) {
   try {
@@ -233,16 +244,17 @@ async function logout(req, res) {
 }
 
 module.exports = {
+  sendIMGS,
   getAllPosts,
   getPostsAndComments,
   createUser,
   loginUser,
+  logout,
   addComment,
   addPost,
   editPost,
   deletePost,
   deleteComments,
-  logout,
   checkMyToken,
   checkRefreshToken,
 };

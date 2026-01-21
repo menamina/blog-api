@@ -7,37 +7,60 @@ import { Outlet } from "react-router";
 function App() {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
-  const [userVerify, setUserVerify] = useState(null);
+  const [postErr, setPostErr] = useState(null);
 
   useEffect(() => {
-    async function verifyUser() {}
+    async function verifyUser() {
+      const res = await fetch("http://localhost:5555/api/whoAmINow", {
+        credentials: "include",
+      });
+
+      if (res.status === 401) {
+        const refreshRes = await fetch("http://localhost:5555/api/refresh", {
+          method: "POST",
+          credentials: "include",
+        });
+
+        if (!refreshRes.ok) {
+          setUser(null);
+          return;
+        } else {
+          const userData = await res.json();
+          setUser(userData);
+        }
+      } else {
+        const userData = await res.json();
+        setUser(userData);
+      }
+    }
     verifyUser();
   }, []);
 
   useEffect(() => {
     async function getPosts() {
-      const res = await fetch("http://localhost:5555/blog");
-      if (!res.ok) {
-        throw new Error("Failed to fetch posts");
-      } else {
-        const postsAndComments = await res.json();
-        setPosts(postsAndComments);
+      try {
+        const res = await fetch("http://localhost:5555/blog");
+        if (!res.ok) {
+          throw new Error("Failed to fetch posts");
+        } else {
+          const postsAndComments = await res.json();
+          setPosts(postsAndComments);
+        }
+      } catch (error) {
+        setPostErr("Something went wrong fetching posts");
+        console.log(error);
       }
     }
+
     getPosts();
   }, []);
 
   return (
     <div className="grandDiv">
-      <Nav
-        user={user}
-        setUser={setUser}
-        userToken={userToken}
-        setToken={setToken}
-      ></Nav>
+      <Nav user={user} setUser={setUser}></Nav>
       <div className="blog holder flex">
         <SideBar></SideBar>
-        <Outlet context={{ posts, setPosts, userToken }}>
+        <Outlet context={{ posts }}>
           <Main></Main>
         </Outlet>
       </div>
