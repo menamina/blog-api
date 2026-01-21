@@ -118,12 +118,14 @@ async function addComment(req, res) {
 async function addPost(req, res) {
   try {
     const { title, body, published } = req.body;
+    const imgFile = req.image;
     await prisma.posts.create({
       data: {
         userID: req.user.id,
         title: title,
         body: body,
         published: published,
+        img: imgFile ? `/api/multerIMG/${imgFile.filename}` : null,
       },
     });
     res.status(201).json({
@@ -137,12 +139,14 @@ async function addPost(req, res) {
 async function editPost(req, res) {
   try {
     const { postID, title, body, published } = req.body;
+    const imgFile = req.image;
     await prisma.posts.update({
       where: { id: postID, userID: req.user.id },
       data: {
         title: title,
         body: body,
         published: published,
+        img: imgFile ? `/api/multerIMG/${imgFile.filename}` : null,
       },
     });
     res.status(201).json({
