@@ -8,7 +8,7 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
   const [postErr, setPostErr] = useState(null);
-  const [postOpen, setPostOpen] = useState(false);
+  const [postOpen, setPostOpen] = useState(null);
 
   useEffect(() => {
     async function verifyUser() {
