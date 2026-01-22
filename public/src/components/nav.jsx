@@ -12,7 +12,7 @@ function Nav({ user, setUser }) {
   return (
     <div className="nav">
       <div>
-        <div>CONTACT</div>
+        <div>BLOG</div>
       </div>
 
       <div>

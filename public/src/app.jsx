@@ -8,6 +8,7 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
   const [postErr, setPostErr] = useState(null);
+  const [postOpen, setPostOpen] = useState(false);
 
   useEffect(() => {
     async function verifyUser() {
@@ -60,8 +61,10 @@ function App() {
       <Nav user={user} setUser={setUser}></Nav>
       <div className="blog holder flex">
         <SideBar></SideBar>
-        <Outlet context={{ posts, user }}>
+        <Outlet context={{ posts, user, setUser, postOpen, setPostOpen }}>
           <Main></Main>
+          <Login></Login>
+          <SignUp></SignUp>
         </Outlet>
       </div>
     </div>
