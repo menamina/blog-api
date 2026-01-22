@@ -2,35 +2,87 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [errors, setErrors] = useState("");
+
+  async function signup(e) {
+    e.preventDefault();
+    const res = await fetch("http://localhost:5555/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        name,
+        password,
+        confirmPassword,
+      }),
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      setErrors(data.errors);
+      return;
+    }
+  }
   return (
-    <div class="Login">
-      <div>
+    <div className="signup">
+      {errors ? (
         <div>
-          <label>email:</label>
-          <input name="email"></input>
+          {errors.map((error) => {
+            -{ error };
+          })}
         </div>
+      ) : null}
+      <form onSubmit={signup}>
         <div>
-          <label>name:</label>
-          <input name="name"></input>
+          <label>Email:</label>
+          <input
+            name="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </div>
+
         <div>
-          <label>password:</label>
-          <input name="password"></input>
+          <label>Name:</label>
+          <input
+            name="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
         </div>
+
         <div>
-          <label>confirm password:</label>
-          <input name="password"></input>
+          <label>Password:</label>
+          <input
+            name="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </div>
+
         <div>
-          <button>signup</button>
+          <label>Confirm Password:</label>
+          <input
+            name="confirmPassword"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
         </div>
-      </div>
+
+        <button type="submit">Signup</button>
+      </form>
 
       <div>
         <div>Already have an account?</div>
-        <div>
-          <Link to="/login">login</Link>
-        </div>
+        <Link to="/login">Login</Link>
       </div>
     </div>
   );

@@ -2,11 +2,8 @@ const prisma = require("../../prisma/client");
 
 async function checkDBForUser(req, res, next) {
   try {
-    const { username, email } = req.body;
+    const { email } = req.body;
 
-    const userNameTaken = await prisma.user.findUnique({
-      where: { username: username },
-    });
     const emailTaken = await prisma.user.findUnique({
       where: { email: email },
     });
@@ -14,10 +11,6 @@ async function checkDBForUser(req, res, next) {
     if (userNameTaken) {
       return res.json({
         userTaken: "username in use",
-      });
-    } else if (emailTaken) {
-      return res.json({
-        emailTaken: "email in use",
       });
     } else {
       next();

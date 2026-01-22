@@ -61,12 +61,11 @@ async function getPostsAndComments(req, res) {
 
 async function createUser(req, res) {
   try {
-    const { name, username, email, password } = req.body;
+    const { name, email, password } = req.body;
     const saltHash = generatePassword(password);
     await prisma.user.create({
       data: {
         name: name,
-        username: username,
         email: email,
         saltedHash: saltHash,
       },
