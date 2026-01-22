@@ -4,9 +4,10 @@ import { useState } from "react";
 function Login() {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
+  const [errors, setErrors] = useState(null);
   async function login(e) {
     e.preventDefault();
-    await fetch("http://localhost:5555/login", {
+    const res = await fetch("http://localhost:5555/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -16,9 +17,21 @@ function Login() {
         password,
       }),
     });
+
+    const data = res.json();
+    if (!res.ok) {
+      setErrors(data.error);
+    }
   }
   return (
     <div>
+      {errors ? (
+        <div>
+          {errors.map((error) => {
+            -{ error };
+          })}
+        </div>
+      ) : null}
       <form onSubmit={login}>
         <div>
           <label>Email:</label>

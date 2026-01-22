@@ -87,7 +87,7 @@ async function loginUser(req, res) {
 
     if (!emailFound) {
       return res.status(401).json({
-        noEmail: "no email found",
+        error: "no email found",
       });
     } else {
       const correctPassword = await validatePassword(
@@ -96,7 +96,7 @@ async function loginUser(req, res) {
       );
       if (!correctPassword) {
         return res.status(401).json({
-          incorrectPass: "incorrect password",
+          error: "incorrect password",
         });
       } else {
         const jwtToken = token(emailFound);
