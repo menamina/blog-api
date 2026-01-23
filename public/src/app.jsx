@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Nav from "./components/nav";
 import SideBar from "./components/sidebar";
 import { Outlet } from "react-router";
+import "../css/app.css";
 
 function App() {
   const [posts, setPosts] = useState([]);

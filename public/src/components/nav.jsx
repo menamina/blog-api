@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import "../../css/app.css";
 
 function Nav({ user, setUser }) {
   async function handleLogout() {
