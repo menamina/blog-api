@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import Nav from "./nav";
-import SideBar from "./sidebar";
+import Nav from "./components/nav";
+import SideBar from "./components/sidebar";
 import { Outlet } from "react-router";
 
 function App() {
@@ -61,7 +61,7 @@ function App() {
       <div className="blog holder flex">
         <SideBar></SideBar>
         <Outlet
-          context={{ posts, user, setUser, postOpen, setPostOpen }}
+          context={{ posts, postErr, user, setUser, postOpen, setPostOpen }}
         ></Outlet>
       </div>
     </div>

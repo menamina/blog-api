@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-function Login() {
+function Login({ user, setUser }) {
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
   const [errors, setErrors] = useState(null);
@@ -21,6 +21,8 @@ function Login() {
     const data = res.json();
     if (!res.ok) {
       setErrors(data.error);
+    } else {
+      setUser(data);
     }
   }
   return (
