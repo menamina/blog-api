@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Nav from "./nav";
 import SideBar from "./sidebar";
-import Main from "./main";
 import { Outlet } from "react-router";
 
 function App() {
@@ -61,11 +60,9 @@ function App() {
       <Nav user={user} setUser={setUser}></Nav>
       <div className="blog holder flex">
         <SideBar></SideBar>
-        <Outlet context={{ posts, user, setUser, postOpen, setPostOpen }}>
-          <Main></Main>
-          <Login></Login>
-          <SignUp></SignUp>
-        </Outlet>
+        <Outlet
+          context={{ posts, user, setUser, postOpen, setPostOpen }}
+        ></Outlet>
       </div>
     </div>
   );

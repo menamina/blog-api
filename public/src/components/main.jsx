@@ -1,7 +1,7 @@
-import { useOutletContext } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 
 function Main() {
-  const { posts, postOpen, setPostOpen, user } = useOutletContext;
+  const { posts, postOpen, setPostOpen, user } = useOutletContext();
   function openPost(e) {
     const postID = e.currentTarget.dataset.id;
     const post = posts.find((post) => post.id === Number(postID));

@@ -1,7 +1,7 @@
 const express = require("express");
 const port = process.env.PORT || 5555;
 const server = express();
-const routes = require("./routes/routes");
+const routes = require("./backend/routes/routes");
 
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));

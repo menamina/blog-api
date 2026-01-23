@@ -230,7 +230,39 @@ async function checkMyToken(req, res) {
   });
 }
 
-async function checkRefreshToken(req, res) {}
+async function checkRefreshToken(req, res, next) {
+  try {
+    const refreshToken = req.cookies?.refreshToken;
+
+    if (!refreshToken) {
+      return res.status(401).json({
+        message: "No refresh token provided",
+      });
+    } else {
+      jwt.verify(
+        refreshToken,
+        process.env.REFRESH_TOKEN_SECRET,
+        (err, decoded) => {
+          if (err) {
+            return res.status(401).json({
+              message: "Invalid or expired refresh token",
+            });
+          }
+          req.user = {
+            id: decoded.id,
+            email: decoded.email,
+          };
+
+          next();
+        },
+      );
+    }
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error checking refresh token",
+    });
+  }
+}
 
 async function logout(req, res) {
   try {
