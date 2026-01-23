@@ -4,6 +4,8 @@
   box-sizing: border-box;
 }
 
+/* global */
+
 .grandDiv {
   display: flex;
   flex-direction: column;
@@ -12,8 +14,44 @@
   width: 100vw;
 }
 
-.nav {
+a,
+a:visited {
+  color: black;
+  cursor: pointer;
+}
+
+/* nav */
+
+.nav,
+.loginSignup {
   display: flex;
   width: 100%;
   justify-content: space-between;
+  text-align: center;
 }
+
+.nav > div {
+  align-self: center;
+}
+
+.loginSignup {
+  gap: 20px;
+}
+
+/* main + nav */
+
+/* below nav flex */
+
+.blog {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  gap: 10px;
+}
+
+.blog > div:first-child {
+  width: 27%;
+  background-color: honeydew;
+}
+
+/* below nav flex */

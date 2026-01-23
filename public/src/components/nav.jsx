@@ -12,9 +12,7 @@ function Nav({ user, setUser }) {
   }
   return (
     <div className="nav">
-      <div>
-        <div>BLOG</div>
-      </div>
+      <div>BLOG</div>
 
       <div>
         <div>ECLECTIC,</div>
