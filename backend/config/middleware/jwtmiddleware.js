@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 function verifyToken(req, res, next) {
   const token = req.cookies.accessToken;
   if (!token) {
-    return res.statue(401).json({ error: "you must be logged in" });
+    return res.status(401).json({ error: "you must be logged in" });
   } else {
     try {
       const decoded = jwt.verify(token, process.env.JWTSECRET);

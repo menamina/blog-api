@@ -118,12 +118,12 @@ async function loginUser(req, res) {
           secure: process.env.NODE_ENV === "production",
           maxAge: 7 * 24 * 60 * 60 * 1000,
         });
+
         return res.json({
-          user: {
-            id: user.id,
-            email: user.email,
-            role: user.role,
-          },
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
         });
       }
     }
