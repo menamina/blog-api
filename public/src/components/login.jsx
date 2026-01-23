@@ -13,8 +13,8 @@ function Login({ user, setUser }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email,
-        password,
+        email: email,
+        password: password,
       }),
     });
 
@@ -26,7 +26,7 @@ function Login({ user, setUser }) {
     }
   }
   return (
-    <div>
+    <div className="main">
       {errors ? (
         <div>
           {errors.map((error) => {
@@ -54,10 +54,12 @@ function Login({ user, setUser }) {
           />
         </div>
 
-        <button type="submit">Login</button>
+        <button class="btn" type="submit" onClick={login}>
+          LOGIN
+        </button>
       </form>
       <div>
-        <div>Dont have an account?</div>
+        <div>Dont have an account yet?</div>
         <Link to="/signup">Signup</Link>
       </div>
     </div>

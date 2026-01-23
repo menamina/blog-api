@@ -9,6 +9,16 @@
   src: url("../src/fonts/harmond.otf") format("opentype");
 }
 
+@font-face {
+  font-family: "harmondSemiBold";
+  src: url("../src/fonts/Harmond-SemiBold.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "ranadeMed";
+  src: url("../src/fonts/Ranade-Medium.otf") format("opentype");
+}
+
 /* global */
 
 .grandDiv {
@@ -20,7 +30,8 @@
 }
 
 a,
-a:visited {
+a:visited,
+.backHome {
   color: black;
   cursor: pointer;
 }
@@ -36,8 +47,16 @@ a:visited {
 }
 
 .nav > div {
-  align-self: center;
-  font-family: "harmond";
+  font-family: "ranadeMed";
+}
+
+.eclectic {
+  font-size: 1.7rem;
+  padding-bottom: 8px;
+}
+
+.backHome {
+  text-decoration: none;
 }
 
 .loginSignup {
@@ -57,7 +76,59 @@ a:visited {
 
 .blog > div:first-child {
   width: 27%;
-  background-color: honeydew;
+}
+
+.main {
+  width: 73%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* below nav flex */
+
+/* login + sign up */
+
+form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 30px;
+}
+
+form > div {
+  display: flex;
+  justify-content: space-between;
+}
+
+form > div:not(:last-child) {
+  align-items: center;
+  height: 30%;
+}
+
+input {
+  width: 70%;
+  height: 40px;
+}
+
+.btn {
+  width: 35%;
+  height: 60px;
+  align-self: center;
+  border-radius: 60px;
+  border: none;
+  cursor: pointer;
+}
+
+.main > form,
+.main > div {
+  width: 40%;
+  height: 100%;
+}
+
+.main > div {
+  text-align: center;
+}
+
+/* login + sign up */

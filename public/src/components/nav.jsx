@@ -12,10 +12,14 @@ function Nav({ user, setUser }) {
   }
   return (
     <div className="nav">
-      <div>BLOG</div>
+      <div>
+        <Link className="backHome" to="/blog">
+          BLOG
+        </Link>
+      </div>
 
       <div>
-        <div>ECLECTIC,</div>
+        <div className="eclectic">ECLECTIC,</div>
         <div>the dev</div>
       </div>
 

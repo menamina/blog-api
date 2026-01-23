@@ -8,7 +8,7 @@ async function checkDBForUser(req, res, next) {
       where: { email: email },
     });
 
-    if (userNameTaken) {
+    if (emailTaken) {
       return res.json({
         userTaken: "username in use",
       });

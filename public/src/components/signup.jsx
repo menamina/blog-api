@@ -16,10 +16,10 @@ function Login() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email,
-        name,
-        password,
-        confirmPassword,
+        email: email,
+        name: name,
+        passowrd: password,
+        confirmPass: confirmPassword,
       }),
     });
     const data = await res.json();
@@ -30,7 +30,7 @@ function Login() {
     }
   }
   return (
-    <div className="signup">
+    <div className="main">
       {errors ? (
         <div>
           {errors.map((error) => {
@@ -77,7 +77,9 @@ function Login() {
           />
         </div>
 
-        <button type="submit">Signup</button>
+        <button className="btn" type="submit" onClick={signup}>
+          SIGN UP
+        </button>
       </form>
 
       <div>
