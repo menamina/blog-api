@@ -12,6 +12,7 @@ const routes = createBrowserRouter([
     children: [
       { path: "/admin-login", element: <Login /> },
       { path: "/dashboard", element: <Dashboard /> },
+      { path: "/new-post", element: <Dashboard /> },
     ],
   },
 ]);

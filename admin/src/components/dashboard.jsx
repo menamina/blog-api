@@ -5,16 +5,68 @@ function Dashboard({
   setUser,
   userNotAdmin,
   posts,
-  setPosts,
   loginErr,
   errors,
+  setPostOpen,
 }) {
-  const deletePost = () => {};
-  const openPost = () => {};
+  async function deletePost(postID) {
+    try {
+      const postIDNum = Number(postID);
+      const res = await fetch("http://localhost:5555/delete-post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          postID: postIDNum,
+        }),
+        credentials: "include",
+      });
 
-  function logout() {
-    // async func to logout
-    setUser(null);
+      const data = res.json();
+
+      if (!res.ok) {
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error.message || error);
+    }
+  }
+
+  async function logout() {
+    const res = await fetch("http://localhost:5555/logout", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    if (res.ok) {
+      setUser(null);
+    }
+  }
+
+  async function renderPost(postID) {
+    try {
+      const postIDNum = Number(postID);
+      const res = await fetch(`http://localhost:5555/edit-post/${postIDNum}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const data = res.json();
+
+      if (!res.ok) {
+        console.log(data.message);
+      } else {
+        setPostOpen(data);
+      }
+    } catch (error) {
+      console.log(error.message || error);
+    }
   }
 
   const publishedPost = posts.filter((post) => post.published === true);
@@ -68,13 +120,16 @@ function Dashboard({
                           <div>{post.title}</div>
                           <div>{(post.body || "").slice(0, 15)}...</div>
                           <div className="line"></div>
-                          <div>
-                            {(post.commentsOnThisPost || []).length} comments
-                          </div>
+                          <div>{post.commentsOnThisPost.length} comments</div>
                           <div className="postActions">
-                            <div onClick={deletePost}>X</div>
-                            <div onClick={openPost}>
-                              <Link to="">edit</Link>
+                            <div onClick={deletePost(post.id)}>X</div>
+                            <div>
+                              <Link
+                                to={`/edit-post/${post.id}`}
+                                onClick={renderPost(post.id)}
+                              >
+                                edit
+                              </Link>
                             </div>
                           </div>
                         </div>
@@ -103,13 +158,13 @@ function Dashboard({
                           <div>{post.title}</div>
                           <div>{(post.body || "").slice(0, 15)}...</div>
                           <div className="line"></div>
-                          <div>
-                            {(post.commentsOnThisPost || []).length} comments
-                          </div>
+                          <div>{post.commentsOnThisPost.length} comments</div>
                           <div className="postActions">
-                            <div onClick={deletePost}>X</div>
-                            <div onClick={openPost}>
-                              <Link to="">edit</Link>
+                            <div onClick={deletePost(post.id)}>X</div>
+                            <div>
+                              <Link to={`/dashboard/edit/${post.id}`}>
+                                edit
+                              </Link>
                             </div>
                           </div>
                         </div>

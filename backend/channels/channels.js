@@ -170,7 +170,33 @@ async function addPost(req, res) {
   }
 }
 
-async function editPost(req, res) {
+async function postToEdit(req, res) {
+  try {
+    const { postID } = req.params;
+    const post = await prisma.posts.findUnique({
+      where: {
+        id: Number(postID),
+      },
+    });
+
+    if (!post) {
+      res.status(404).json({
+        error: {
+          type: "no post",
+          message: "no post found",
+        },
+      });
+    } else {
+      res.json({
+        post,
+      });
+    }
+  } catch (error) {
+    res.status(500).send("error editing post");
+  }
+}
+
+async function postEdit(req, res) {
   try {
     const { postID, title, body, published } = req.body;
     const imgFile = req.image;
@@ -195,7 +221,7 @@ async function deletePost(req, res) {
   try {
     const { postID } = req.body;
     await prisma.posts.delete({
-      where: { id: postID, userID: req.user.id },
+      where: { id: postID },
     });
     res.status(201).json({
       message: "post deleted",
@@ -208,8 +234,9 @@ async function deletePost(req, res) {
 async function deleteComments(req, res) {
   try {
     const { commentID, postID } = req.body;
+
     await prisma.comments.delete({
-      where: { id: commentID, postID: postID },
+      where: { id: Number(commentID), postID: Number(postID) },
     });
     res.status(201).json({
       message: "comment deleted",
@@ -283,7 +310,8 @@ module.exports = {
   logout,
   addComment,
   addPost,
-  editPost,
+  postToEdit,
+  postEdit,
   deletePost,
   deleteComments,
   checkMyToken,

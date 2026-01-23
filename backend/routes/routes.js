@@ -23,16 +23,23 @@ router.post("/api/refresh", verifyToken, remote.checkRefreshToken);
 router.post("/admin-login", remote.loginUser);
 router.get("/dashboard", verifyToken, isAdmin, remote.getAllPosts);
 router.post(
-  "/dashboard/addPost",
+  "/new-post",
   verifyToken,
   isAdmin,
   multer.single("image"),
   remote.addPost,
 );
-router.put("/dashboard/editPost", verifyToken, isAdmin, remote.editPost);
-router.delete("/dashboard/deletePost", verifyToken, isAdmin, remote.deletePost);
+
+router.get("/edit-post/:postID", verifyToken, isAdmin, remote.postToEdit);
+router.put("/edit-post/:postID", verifyToken, isAdmin, remote.postEdit);
 router.delete(
-  "dashboard/deleteComments",
+  "/dashboard/delete-post",
+  verifyToken,
+  isAdmin,
+  remote.deletePost,
+);
+router.delete(
+  "dashboard/delete-comments",
   verifyToken,
   isAdmin,
   remote.deleteComments,

@@ -11,6 +11,7 @@ function App() {
   useEffect(() => {
     async function getPosts() {
       const res = await fetch("http://localhost:5555/dashboard", {
+        method: "GET",
         credentials: "include",
       });
       const data = await res.json();
