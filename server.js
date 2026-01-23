@@ -7,7 +7,13 @@ const cors = require("cors");
 server.use(express.json());
 server.use(express.urlencoded({ extended: false }));
 server.use("/uploads", express.static("uploads"));
-server.use(cors());
+server.use(
+  cors({
+    origin: "http://localhost:5173",
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  }),
+);
 
 server.use("/", routes);
 
