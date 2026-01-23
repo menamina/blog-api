@@ -26,13 +26,9 @@ function Nav({ user, setUser }) {
           </div>
         ) : (
           <div className="loginSignup hidden">
-            <div>
-              <Link to="/login">LOGIN</Link>
-            </div>
+            <Link to="/login">LOGIN</Link>
             <div>/</div>
-            <div>
-              <Link to="/signup">SIGNUP</Link>
-            </div>
+            <Link to="/signup">SIGNUP</Link>
           </div>
         )}
       </div>
