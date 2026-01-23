@@ -2,6 +2,6 @@ import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-function EditPost() {}
+function AddPost() {}
 
-export default EditPost;
+export default AddPost;

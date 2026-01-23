@@ -30,8 +30,8 @@ router.post(
   remote.addPost,
 );
 
-router.get("/edit-post/:postID", verifyToken, isAdmin, remote.postToEdit);
-router.put("/edit-post/:postID", verifyToken, isAdmin, remote.postEdit);
+router.get("/edit-post/", verifyToken, isAdmin, remote.postToEdit);
+router.put("/edit-post/", verifyToken, isAdmin, remote.postEdit);
 router.delete(
   "/dashboard/delete-post",
   verifyToken,

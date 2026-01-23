@@ -200,13 +200,13 @@ async function postEdit(req, res) {
   try {
     const { postID, title, body, published } = req.body;
     const imgFile = req.image;
-    await prisma.posts.update({
-      where: { id: postID, userID: req.user.id },
+    await prisma.posts.updateMany({
+      where: { id: Number(postID), userID: req.user.id },
       data: {
         title: title,
         body: body,
         published: published,
-        img: imgFile ? `/api/multerIMG/${imgFile.filename}` : null,
+        img: imgFile ? `/api/multerIMG/${imgFile.filename}` : undefined,
       },
     });
     res.status(201).json({

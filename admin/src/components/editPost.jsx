@@ -3,6 +3,9 @@ import { Outlet } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 function EditPost({ postOpen, setPostOpen }) {
+  const [showComments, setShowComments] = useState(false);
+  const [comments, setComments] = useState([]);
+
   useEffect(() => {
     if (postOpen.post.commentsOnThisPost.length === 0) {
       setComments([]);
@@ -14,12 +17,35 @@ function EditPost({ postOpen, setPostOpen }) {
     }
   }, [postOpen]);
 
-  const [showComments, setShowComments] = useState(false);
-  const [comments, setComments] = useState([]);
+  async function updatePost(e) {
+    e.preventDefault();
 
-  function updatePost() {
-    setPostOpen(false);
-  }
+    try {
+      const res = await fetch("http://localhost:5555/edit-post", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          postID: postOpen.post.id,
+          title,
+          body,
+          published,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        console.log(data.error);
+        return;
+      }
+      setPostOpen(false);
+    } catch (err) {
+      console.log("error");
+      console.error(err);
+    } 
 
   function viewComments() {
     setShowComments(!showComments);
@@ -83,7 +109,7 @@ function EditPost({ postOpen, setPostOpen }) {
         <div>
           <div>
             <form>
-              <div onClick={deletePost(postID)}>X</div>
+              <div onClick={() => deletePost(postOpen.post.id)}>X</div>
               <div>
                 <label>Title:</label>
                 <input value={`${postOpen.post.title}`} name="title"></input>
@@ -112,7 +138,7 @@ function EditPost({ postOpen, setPostOpen }) {
           <div>
             {showComments ? (
               <div>
-                {postOpen.post.commentsOnThisPost.map((comment) => {
+                {comments.map((comment) => {
                   return (
                     <div className="COMMENT" key={comment.createdAt}>
                       <div>
