@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 function EditPost({ postOpen, setPostOpen }) {
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
+  const [title, setTitle] = useState(null);
+  const [body, setBody] = useState(null);
+  const [published, setPublished] = useState(false);
 
   useEffect(() => {
     if (!postOpen || !postOpen.post) return;
@@ -21,7 +24,6 @@ function EditPost({ postOpen, setPostOpen }) {
     e.preventDefault();
 
     try {
-      const { title, body, published } = postOpen.post;
       const res = await fetch(
         `http://localhost:5555/edit-post/${postOpen.post.id}`,
         {
@@ -57,17 +59,20 @@ function EditPost({ postOpen, setPostOpen }) {
 
     async function deleteComment(commentID, postID) {
       try {
-        const res = await fetch("http://localhost:5555/delete-comment", {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
+        const res = await fetch(
+          "http://localhost:5555/dashboard/delete-comments",
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              commentID: Number(commentID),
+              postID: Number(postID),
+            }),
+            credentials: "include",
           },
-          body: JSON.stringify({
-            id: Number(commentID),
-            postID: Number(postID),
-          }),
-          credentials: "include",
-        });
+        );
 
         if (res.ok) {
           setComments((prev) =>
@@ -84,7 +89,7 @@ function EditPost({ postOpen, setPostOpen }) {
     async function deletePost(postID) {
       try {
         const postIDNum = Number(postID);
-        const res = await fetch("http://localhost:5555/delete-post", {
+        const res = await fetch("http://localhost:5555/dashboard/delete-post", {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -116,11 +121,27 @@ function EditPost({ postOpen, setPostOpen }) {
                 <div onClick={() => deletePost(postOpen.post.id)}>X</div>
                 <div>
                   <label>Title:</label>
-                  <input value={`${postOpen.post.title}`} name="title"></input>
+                  <input
+                    value={title}
+                    name="title"
+                    onChange={(e) => setTitle(e.target.value)}
+                  ></input>
                 </div>
                 <div>
                   <label>Body:</label>
-                  <input value={`${postOpen.post.body}`} name="body"></input>
+                  <input
+                    value={body}
+                    name="body"
+                    onChange={(e) => setBody(e.target.value)}
+                  ></input>
+                </div>
+                <div>
+                  <label>Published:</label>
+                  <input
+                    type="checkbox"
+                    checked={published}
+                    onChange={(e) => setPublished(e.target.checked)}
+                  />
                 </div>
                 <div>
                   <Link to="/dashboard">cancel</Link>
@@ -152,10 +173,9 @@ function EditPost({ postOpen, setPostOpen }) {
                           <div>{comment.comment}</div>
                         </div>
                         <div
-                          onClick={deleteComment(
-                            comment.id,
-                            postOpen.post.postID,
-                          )}
+                          onClick={() =>
+                            deleteComment(comment.id, postOpen.post.id)
+                          }
                         >
                           X
                         </div>
