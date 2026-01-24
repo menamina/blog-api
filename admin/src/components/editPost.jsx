@@ -6,6 +6,7 @@ function EditPost({ postOpen, setPostOpen }) {
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
+    if (!postOpen || !postOpen.post) return;
     if (postOpen.post.commentsOnThisPost.length === 0) {
       setComments([]);
     } else {
@@ -20,19 +21,23 @@ function EditPost({ postOpen, setPostOpen }) {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://localhost:5555/edit-post", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const { title, body, published } = postOpen.post;
+      const res = await fetch(
+        `http://localhost:5555/edit-post/${postOpen.post.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            postID: postOpen.post.id,
+            title,
+            body,
+            published,
+          }),
         },
-        credentials: "include",
-        body: JSON.stringify({
-          postID: postOpen.post.id,
-          title,
-          body,
-          published,
-        }),
-      });
+      );
 
       const data = await res.json();
 
@@ -53,7 +58,7 @@ function EditPost({ postOpen, setPostOpen }) {
     async function deleteComment(commentID, postID) {
       try {
         const res = await fetch("http://localhost:5555/delete-comment", {
-          method: "POST",
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
@@ -80,7 +85,7 @@ function EditPost({ postOpen, setPostOpen }) {
       try {
         const postIDNum = Number(postID);
         const res = await fetch("http://localhost:5555/delete-post", {
-          method: "POST",
+          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
@@ -107,7 +112,7 @@ function EditPost({ postOpen, setPostOpen }) {
         ) : (
           <div>
             <div>
-              <form onSubmit={handleUpdatePost}>
+              <form onSubmit={updatePost}>
                 <div onClick={() => deletePost(postOpen.post.id)}>X</div>
                 <div>
                   <label>Title:</label>
@@ -118,9 +123,7 @@ function EditPost({ postOpen, setPostOpen }) {
                   <input value={`${postOpen.post.body}`} name="body"></input>
                 </div>
                 <div>
-                  <Link to="/dashboard" onClick={updatePost}>
-                    cancel
-                  </Link>
+                  <Link to="/dashboard">cancel</Link>
                   <button type="submit">update</button>
                 </div>
               </form>

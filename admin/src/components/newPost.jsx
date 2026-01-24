@@ -8,35 +8,20 @@ function AddPost() {
   async function handleSubmit(e) {
     const action = e.nativeEvent.submitter.value;
 
-    if (action === "draft") {
-      const res = await fetch("http://localhost:5555/", {
-        method: "POST",
-        credentials: "include",
-        body: {
-          title: title,
-          body: body,
-          img: image,
-        },
-      });
-      const data = res.json();
-      if (!res.ok) {
-        console.log(data.error);
-      }
-    } else if (action === "post") {
-      const res = await fetch("http://localhost:5555/", {
-        method: "POST",
-        credentials: "include",
-        body: {
-          title: title,
-          body: body,
-          img: image,
-          published: true,
-        },
-      });
-      const data = res.json();
-      if (!res.ok) {
-        console.log(data.error);
-      }
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("body", body);
+    if (image) formData.append("image", image);
+    formData.append("published", action === "post");
+
+    const res = await fetch("http://localhost:5555/new-post", {
+      method: "POST",
+      credentials: "include",
+      body: formData,
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.log(data.error);
     }
   }
   return (
@@ -56,8 +41,7 @@ function AddPost() {
             type="file"
             name="image"
             accept="image/*"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
+            onChange={(e) => setImage(e.target.files[0])}
           ></input>
         </div>
         <div>

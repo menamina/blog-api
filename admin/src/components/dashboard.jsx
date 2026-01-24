@@ -5,6 +5,7 @@ function Dashboard({
   setUser,
   userNotAdmin,
   posts,
+  setPosts,
   loginErr,
   errors,
   setPostOpen,
@@ -12,8 +13,8 @@ function Dashboard({
   async function deletePost(postID) {
     try {
       const postIDNum = Number(postID);
-      const res = await fetch("http://localhost:5555/delete-post", {
-        method: "POST",
+      const res = await fetch("http://localhost:5555/dashboard/delete-post", {
+        method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
@@ -23,11 +24,13 @@ function Dashboard({
         credentials: "include",
       });
 
-      const data = res.json();
+      const data = await res.json();
 
       if (!res.ok) {
         console.log(data.message);
+        return;
       }
+      setPosts((prev) => prev.filter((p) => p.id !== postIDNum));
     } catch (error) {
       console.log(error.message || error);
     }
@@ -57,12 +60,12 @@ function Dashboard({
         credentials: "include",
       });
 
-      const data = res.json();
+      const data = await res.json();
 
       if (!res.ok) {
         console.log(data.message);
       } else {
-        setPostOpen(data);
+        setPostOpen(data.post || data);
       }
     } catch (error) {
       console.log(error.message || error);
@@ -110,23 +113,22 @@ function Dashboard({
                     {publishedPost.map((post) => (
                       <div key={post.id}>
                         <div className="left postDiv">
-                          <img
-                            src={`api/multerIMG/${post.img}`}
-                            alt={post.title}
-                          />
+                          <img src={`/api/multerIMG/${post.img}`} alt={post.title} />
                         </div>
                         <div className="right postDiv">
                           <div>{post.createdAt}</div>
                           <div>{post.title}</div>
                           <div>{(post.body || "").slice(0, 15)}...</div>
                           <div className="line"></div>
-                          <div>{post.commentsOnThisPost.length} comments</div>
+                          <div>
+                            {(post.commentsOnThisPost || []).length} comments
+                          </div>
                           <div className="postActions">
-                            <div onClick={deletePost(post.id)}>X</div>
+                            <div onClick={() => deletePost(post.id)}>X</div>
                             <div>
                               <Link
                                 to={`/edit-post/${post.id}`}
-                                onClick={renderPost(post.id)}
+                                onClick={() => renderPost(post.id)}
                               >
                                 edit
                               </Link>
@@ -148,19 +150,18 @@ function Dashboard({
                     {unpublishedPost.map((post) => (
                       <div key={post.id}>
                         <div className="left postDiv">
-                          <img
-                            src={`api/multerIMG/${post.img}`}
-                            alt={post.title}
-                          />
+                          <img src={`/api/multerIMG/${post.img}`} alt={post.title} />
                         </div>
                         <div className="right postDiv">
                           <div>{post.createdAt}</div>
                           <div>{post.title}</div>
                           <div>{(post.body || "").slice(0, 15)}...</div>
                           <div className="line"></div>
-                          <div>{post.commentsOnThisPost.length} comments</div>
+                          <div>
+                            {(post.commentsOnThisPost || []).length} comments
+                          </div>
                           <div className="postActions">
-                            <div onClick={deletePost(post.id)}>X</div>
+                            <div onClick={() => deletePost(post.id)}>X</div>
                             <div>
                               <Link to={`/dashboard/edit/${post.id}`}>
                                 edit

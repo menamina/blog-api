@@ -18,7 +18,7 @@ function Login({ user, setUser }) {
       }),
     });
 
-    const data = res.json();
+    const data = await res.json();
     if (!res.ok) {
       setErrors(data.error);
     } else {
