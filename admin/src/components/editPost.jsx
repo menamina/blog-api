@@ -60,20 +60,25 @@ function EditPost({ postOpen, setPostOpen }) {
 
   async function deleteComment(commentID, postID) {
     try {
-      const res = await fetch("http://localhost:5555/dashboard/delete-comments", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        "http://localhost:5555/dashboard/delete-comments",
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            commentID: Number(commentID),
+            postID: Number(postID),
+          }),
+          credentials: "include",
         },
-        body: JSON.stringify({
-          commentID: Number(commentID),
-          postID: Number(postID),
-        }),
-        credentials: "include",
-      });
+      );
 
       if (res.ok) {
-        setComments((prev) => prev.filter((comment) => comment.id !== commentID));
+        setComments((prev) =>
+          prev.filter((comment) => comment.id !== commentID),
+        );
       } else {
         console.log("cannot delete comment");
       }
@@ -168,7 +173,11 @@ function EditPost({ postOpen, setPostOpen }) {
                         <div>{comment.createdAt}</div>
                         <div>{comment.comment}</div>
                       </div>
-                      <div onClick={() => deleteComment(comment.id, postOpen.post.id)}>
+                      <div
+                        onClick={() =>
+                          deleteComment(comment.id, postOpen.post.id)
+                        }
+                      >
                         X
                       </div>
                     </div>

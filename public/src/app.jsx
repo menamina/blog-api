@@ -12,26 +12,19 @@ function App() {
 
   useEffect(() => {
     async function verifyUser() {
-      const res = await fetch("http://localhost:5555/api/whoAmINow", {
-        credentials: "include",
-      });
-
-      if (res.status === 401) {
-        const refreshRes = await fetch("http://localhost:5555/api/refresh", {
-          method: "POST",
+      try {
+        const res = await fetch("http://localhost:5555/api/whoAmINow", {
           credentials: "include",
         });
 
-        if (!refreshRes.ok) {
+        if (!res.ok) {
           setUser(null);
-          return;
         } else {
           const userData = await res.json();
           setUser(userData);
         }
-      } else {
-        const userData = await res.json();
-        setUser(userData);
+      } catch {
+        setUser(null);
       }
     }
     verifyUser();

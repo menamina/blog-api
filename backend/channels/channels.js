@@ -107,14 +107,14 @@ async function loginUser(req, res) {
         );
         res.cookie("accessToken", jwtToken, {
           httpOnly: true,
-          sameSite: "strict",
+          sameSite: "lax",
           secure: process.env.NODE_ENV === "production",
           maxAge: 15 * 60 * 1000,
         });
 
         res.cookie("refreshToken", refreshToken, {
           httpOnly: true,
-          sameSite: "strict",
+          sameSite: "lax",
           secure: process.env.NODE_ENV === "production",
           maxAge: 7 * 24 * 60 * 60 * 1000,
         });
@@ -249,12 +249,13 @@ async function deleteComments(req, res) {
 async function checkMyToken(req, res) {
   if (!req.user) {
     return res.status(401).json({ error: "Not authenticated" });
+  } else {
+    return res.json({
+      id: req.user.id,
+      email: req.user.email,
+      role: req.user.role,
+    });
   }
-  return res.json({
-    id: req.user.id,
-    email: req.user.email,
-    role: req.user.role,
-  });
 }
 
 async function checkRefreshToken(req, res, next) {

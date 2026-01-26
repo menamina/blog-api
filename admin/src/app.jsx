@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 function App() {
   const [user, setUser] = useState(false);
   const [userNotAdmin, setUserNotAdmin] = useState(null);
+  const [postOpen, setPostOpen] = useState(null);
   const [posts, setPosts] = useState([]);
   const [loginErr, setLoginErr] = useState([]);
   const [errors, setErrors] = useState(null);
@@ -42,6 +43,8 @@ function App() {
           userNotAdmin,
           posts,
           setPosts,
+          postOpen,
+          setPostOpen,
           loginErr,
           errors,
         }}

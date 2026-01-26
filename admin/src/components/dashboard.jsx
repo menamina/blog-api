@@ -113,7 +113,10 @@ function Dashboard({
                     {publishedPost.map((post) => (
                       <div key={post.id}>
                         <div className="left postDiv">
-                          <img src={`/api/multerIMG/${post.img}`} alt={post.title} />
+                          <img
+                            src={`/api/multerIMG/${post.img}`}
+                            alt={post.title}
+                          />
                         </div>
                         <div className="right postDiv">
                           <div>{post.createdAt}</div>
@@ -150,7 +153,10 @@ function Dashboard({
                     {unpublishedPost.map((post) => (
                       <div key={post.id}>
                         <div className="left postDiv">
-                          <img src={`/api/multerIMG/${post.img}`} alt={post.title} />
+                          <img
+                            src={`/api/multerIMG/${post.img}`}
+                            alt={post.title}
+                          />
                         </div>
                         <div className="right postDiv">
                           <div>{post.createdAt}</div>

@@ -2,6 +2,9 @@ const jwt = require("jsonwebtoken");
 
 function verifyToken(req, res, next) {
   const token = req.cookies.accessToken;
+  if (req.method === "OPTIONS") {
+    return next();
+  }
   if (!token) {
     return res.status(401).json({ error: "you must be logged in" });
   } else {

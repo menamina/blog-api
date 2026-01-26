@@ -1,9 +1,9 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import App from "./src/app";
-import Login from "./src/components/login";
-import Dashboard from "./src/components/dashboard";
+import App from "./app";
+import Login from "./components/login";
+import Dashboard from "./components/dashboard";
 
 const routes = createBrowserRouter([
   {
