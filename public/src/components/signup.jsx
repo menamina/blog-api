@@ -6,27 +6,32 @@ function Login() {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState("");
+  const [errors, setErrors] = useState(null);
 
   async function signup(e) {
     e.preventDefault();
-    const res = await fetch("http://localhost:5555/signup", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: email,
-        name: name,
-        passowrd: password,
-        confirmPass: confirmPassword,
-      }),
-    });
-    const data = await res.json();
+    try {
+      const res = await fetch("http://localhost:5555/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          name: name,
+          passowrd: password,
+          confirmPass: confirmPassword,
+        }),
+      });
+      const data = await res.json();
 
-    if (!res.ok) {
-      setErrors(data.errors);
-      return;
+      if (!res.ok) {
+        setErrors(data.errors);
+        console.log("err res.ok");
+        return;
+      }
+    } catch {
+      console.log("error res.ok was ok");
     }
   }
   return (
@@ -34,7 +39,7 @@ function Login() {
       {errors ? (
         <div>
           {errors.map((error) => {
-            -{ error };
+            return <div>{error.msg}</div>;
           })}
         </div>
       ) : null}

@@ -3,13 +3,6 @@ const { body, validationResult } = require("express-validator");
 const signUpValidator = [
   body("name").notEmpty().withMessage("Name is required"),
 
-  body("username")
-    .trim()
-    .notEmpty()
-    .withMessage("Username is required")
-    .isAlphanumeric()
-    .withMessage("Username can only contain letters +/ numbers"),
-
   body("email")
     .trim()
     .notEmpty()
@@ -18,7 +11,6 @@ const signUpValidator = [
     .withMessage("Please enter a valid email"),
 
   body("password")
-    .notEmpty()
     .isLength({ min: 8 })
     .withMessage("Password must be at least 8 characters"),
 
