@@ -14,7 +14,7 @@ const signUpValidator = [
     .isLength({ min: 8 })
     .withMessage("Password must be at least 8 characters"),
 
-  body("confirmPass").custom((value, { req }) => {
+  body("confirmPassword").custom((value, { req }) => {
     if (value !== req.body.password) {
       throw new Error("Passwords must match");
     } else {

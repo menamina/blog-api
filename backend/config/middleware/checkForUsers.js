@@ -9,13 +9,14 @@ async function checkDBForUser(req, res, next) {
     });
 
     if (emailTaken) {
-      return res.json({
-        userTaken: "username in use",
+      return res.status(409).json({
+        userTaken: "email in use",
       });
     } else {
       next();
     }
   } catch (error) {
+    console.error(error);
     res.status(500).send("cannot check if user or email is taken");
   }
 }

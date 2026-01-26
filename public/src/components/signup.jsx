@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
-function Login() {
+function SignUp() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errors, setErrors] = useState(null);
+  const [errors, setErrors] = useState("");
+  const [emailTaken, setEmailTaken] = useState("");
 
   async function signup(e) {
     e.preventDefault();
@@ -17,10 +18,10 @@ function Login() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: email,
-          name: name,
-          passowrd: password,
-          confirmPass: confirmPassword,
+          email,
+          name,
+          password,
+          confirmPassword,
         }),
       });
       const data = await res.json();
@@ -29,6 +30,9 @@ function Login() {
         setErrors(data.errors);
         console.log("err res.ok");
         return;
+      } else {
+        setErrors(null);
+        data.userTaken ? setEmailTaken(data.userTaken) : null;
       }
     } catch {
       console.log("error res.ok was ok");
@@ -44,6 +48,7 @@ function Login() {
         </div>
       ) : null}
       <form onSubmit={signup}>
+        {emailTaken ? <div>{emailTaken} </div> : null}
         <div>
           <label>Email:</label>
           <input
@@ -82,7 +87,7 @@ function Login() {
           />
         </div>
 
-        <button className="btn" type="submit" onClick={signup}>
+        <button className="btn" type="submit">
           SIGN UP
         </button>
       </form>
@@ -95,4 +100,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default SignUp;

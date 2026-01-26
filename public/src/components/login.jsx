@@ -2,8 +2,8 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 
 function Login({ user, setUser }) {
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errors, setErrors] = useState(null);
   async function login(e) {
     e.preventDefault();
@@ -54,7 +54,7 @@ function Login({ user, setUser }) {
           />
         </div>
 
-        <button class="btn" type="submit" onClick={login}>
+        <button className="btn" type="submit" onClick={login}>
           LOGIN
         </button>
       </form>
