@@ -1,4 +1,5 @@
 const prisma = require("../prisma/client");
+const jwt = require("jsonwebtoken");
 const {
   generatePassword,
   validatePassword,
@@ -102,7 +103,7 @@ async function loginUser(req, res) {
         const jwtToken = token(emailFound);
         const refreshToken = jwt.sign(
           { id: emailFound.id, email: emailFound.email, role: emailFound.role },
-          process.env.JWTREFRESH,
+          process.env.REFRESH_TOKEN_SECRET,
           { expiresIn: "7d" },
         );
         res.cookie("accessToken", jwtToken, {
@@ -120,15 +121,15 @@ async function loginUser(req, res) {
         });
 
         return res.json({
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
+          id: emailFound.id,
+          name: emailFound.name,
+          email: emailFound.email,
+          role: emailFound.role,
         });
       }
     }
   } catch (error) {
-    res.status(500).send("error logging in");
+    res.status(500).json({ error: "error logging in" });
   }
 }
 

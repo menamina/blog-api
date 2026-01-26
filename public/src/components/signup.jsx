@@ -11,6 +11,7 @@ function SignUp() {
 
   async function signup(e) {
     e.preventDefault();
+    setEmailTaken("");
     try {
       const res = await fetch("http://localhost:5555/signup", {
         method: "POST",
@@ -25,6 +26,12 @@ function SignUp() {
         }),
       });
       const data = await res.json();
+
+      if (res.status === 409 && data.userTaken) {
+        setErrors(null);
+        setEmailTaken(data.userTaken);
+        return;
+      }
 
       if (!res.ok) {
         setErrors(data.errors);

@@ -27,13 +27,7 @@ function Login({ user, setUser }) {
   }
   return (
     <div className="main">
-      {errors ? (
-        <div>
-          {errors.map((error) => {
-            -{ error };
-          })}
-        </div>
-      ) : null}
+      {errors && <div>{errors}</div>}
       <form onSubmit={login}>
         <div>
           <label>Email:</label>
@@ -54,7 +48,7 @@ function Login({ user, setUser }) {
           />
         </div>
 
-        <button className="btn" type="submit" onClick={login}>
+        <button className="btn" type="submit">
           LOGIN
         </button>
       </form>
