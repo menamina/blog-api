@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
+import "./css/app.css";
 
 function App() {
   const [user, setUser] = useState(null);

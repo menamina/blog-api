@@ -1,5 +1,6 @@
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { useState } from "react";
+import "../css/app.css";
 
 function Login() {
   const navigate = useNavigate();

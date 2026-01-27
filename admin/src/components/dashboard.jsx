@@ -1,4 +1,5 @@
 import { Link, useOutletContext } from "react-router-dom";
+import "../css/app.css";
 
 function Dashboard() {
   const {

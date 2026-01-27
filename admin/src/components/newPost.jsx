@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import "../css/app.css";
 
 function AddPost() {
   const [title, setTitle] = useState(null);
@@ -57,6 +58,7 @@ function AddPost() {
           <button value="post">post</button>
         </div>
       </form>
+      <Link to="/dashboard">cancel</Link>
     </div>
   );
 }
