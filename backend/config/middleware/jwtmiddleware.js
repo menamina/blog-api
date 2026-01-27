@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 function verifyToken(req, res, next) {
-  const token = req.cookies.accessToken;
+  const token = req.cookies.accessToken || req.cookies.refreshToken;
   if (req.method === "OPTIONS") {
     return next();
   }
@@ -21,7 +21,6 @@ function verifyToken(req, res, next) {
 }
 
 async function isAdmin(req, res, next) {
-  const role = req.user.role;
   if (role === "admin") {
     next();
   } else {

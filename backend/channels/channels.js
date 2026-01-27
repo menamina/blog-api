@@ -211,14 +211,14 @@ async function addComment(req, res) {
 async function addPost(req, res) {
   try {
     const { title, body, published } = req.body;
-    const imgFile = req.image;
+    const imgFile = req.file;
     await prisma.posts.create({
       data: {
         userID: req.user.id,
         title: title,
         body: body,
         published: published,
-        img: imgFile ? `/api/multerIMG/${imgFile.filename}` : null,
+        img: imgFile ? imgFile.filename : null,
       },
     });
     res.status(201).json({

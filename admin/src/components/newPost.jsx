@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import "../css/app.css";
 
 function AddPost() {
-  const [title, setTitle] = useState(null);
-  const [body, setBody] = useState(null);
-  const [image, setImage] = useState(null);
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [image, setImage] = useState("");
+
   async function handleSubmit(e) {
+    e.preventDefault();
     const action = e.nativeEvent.submitter.value;
 
     const formData = new FormData();
@@ -26,8 +28,8 @@ function AddPost() {
     }
   }
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="newPostDiv">
+      <form className="formNewPost" onSubmit={handleSubmit}>
         <div>
           <label>title:</label>
           <input
