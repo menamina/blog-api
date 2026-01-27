@@ -10,6 +10,21 @@ function App() {
   const [errors, setErrors] = useState(null);
 
   useEffect(() => {
+    async function getUser() {
+      const res = await fetch("http://localhost:5555/api/whoAmINow", {
+        credentials: "include",
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data);
+      }
+    }
+
+    getUser();
+  }, []);
+
+  useEffect(() => {
     async function getPosts() {
       const res = await fetch("http://localhost:5555/dashboard", {
         method: "GET",
@@ -34,6 +49,8 @@ function App() {
       } else {
         setIsAdmin(true);
         setPosts(data);
+        setLoginErr(null);
+        setErrors(null);
         return;
       }
     }

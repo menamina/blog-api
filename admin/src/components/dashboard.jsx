@@ -1,15 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 
-function Dashboard({
-  user,
-  setUser,
-  isAdmin,
-  posts,
-  setPosts,
-  loginErr,
-  errors,
-  setPostOpen,
-}) {
+function Dashboard() {
+  const {
+    user,
+    setUser,
+    isAdmin,
+    posts,
+    setPosts,
+    loginErr,
+    errors,
+    setPostOpen,
+  } = useOutletContext();
   async function deletePost(postID) {
     try {
       const postIDNum = Number(postID);
@@ -83,8 +84,6 @@ function Dashboard({
     <div>
       {loginErr ? <div>{loginErr}</div> : null}
 
-      {isAdmin ? <div>{isAdmin}</div> : null}
-
       {errors ? <div>{errors}</div> : null}
 
       {isAdmin === true ? (
@@ -93,7 +92,7 @@ function Dashboard({
             <div>
               <Link to="/new-post">NEW POST</Link>
             </div>
-            <div>Hi, {user.name}</div>
+            <div>Hi, {user?.name}</div>
             <div>
               <Link to="/admin-login" onClick={logout}>
                 LOGOUT
@@ -188,7 +187,7 @@ function Dashboard({
           </div>
         </div>
       ) : (
-        <div>notwork</div>
+        <div>loading</div>
       )}
     </div>
   );

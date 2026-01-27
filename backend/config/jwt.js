@@ -6,6 +6,7 @@ function token(user) {
   return jwt.sign(
     {
       id: user.id,
+      name: user.name,
       email: user.email,
       role: user.role,
     },
