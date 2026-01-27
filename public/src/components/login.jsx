@@ -1,7 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link, useOutletContext, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-function Login({ user, setUser }) {
+function Login() {
+  const { setUser } = useOutletContext();
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState(null);
@@ -23,6 +25,7 @@ function Login({ user, setUser }) {
       setErrors(data.error);
     } else {
       setUser(data);
+      navigate("/blog");
     }
   }
   return (

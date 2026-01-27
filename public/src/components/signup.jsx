@@ -1,7 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
 function SignUp() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
@@ -40,6 +41,7 @@ function SignUp() {
       } else {
         setErrors(null);
         data.userTaken ? setEmailTaken(data.userTaken) : null;
+        navigate("/login");
       }
     } catch {
       console.log("error res.ok was ok");
