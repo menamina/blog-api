@@ -20,7 +20,7 @@ router.get("/api/whoAmINow", verifyToken, remote.checkMyToken);
 router.post("/api/refresh", verifyToken, remote.checkRefreshToken);
 
 // admin
-router.post("/admin-login", remote.loginUser);
+router.post("/admin-login", remote.loginAdmin);
 router.get("/dashboard", verifyToken, isAdmin, remote.getAllPosts);
 router.post(
   "/new-post",

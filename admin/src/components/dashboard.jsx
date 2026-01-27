@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 function Dashboard({
   user,
   setUser,
-  userNotAdmin,
+  isAdmin,
   posts,
   setPosts,
   loginErr,
@@ -72,18 +72,22 @@ function Dashboard({
     }
   }
 
-  const publishedPost = posts.filter((post) => post.published === true);
-  const unpublishedPost = posts.filter((post) => post.published === false);
+  const publishedPost = posts
+    ? posts.filter((post) => post.published === true)
+    : [];
+  const unpublishedPost = posts
+    ? posts.filter((post) => post.published === false)
+    : [];
 
   return (
     <div>
       {loginErr ? <div>{loginErr}</div> : null}
 
-      {userNotAdmin ? <div>{userNotAdmin}</div> : null}
+      {isAdmin ? <div>{isAdmin}</div> : null}
 
       {errors ? <div>{errors}</div> : null}
 
-      {userNotAdmin === false ? (
+      {isAdmin === true ? (
         <div className="adminDash">
           <div className="nav">
             <div>
@@ -183,7 +187,9 @@ function Dashboard({
             )}
           </div>
         </div>
-      ) : null}
+      ) : (
+        <div>notwork</div>
+      )}
     </div>
   );
 }

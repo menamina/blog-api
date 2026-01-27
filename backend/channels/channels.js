@@ -133,6 +133,64 @@ async function loginUser(req, res) {
   }
 }
 
+async function loginAdmin(req, res) {
+  try {
+    const { email, password } = req.body;
+    const emailFound = await prisma.user.findUnique({
+      where: { email: email },
+    });
+
+    if (!emailFound) {
+      return res.status(401).json({
+        error: "no email found",
+      });
+    } else if (emailFound.role === "user") {
+      return res.status(401).json({
+        error: "you are not an authorized admin",
+      });
+    } else if (emailFound && emailFound.role === "admin") {
+      const correctPassword = await validatePassword(
+        password,
+        emailFound.saltedHash,
+      );
+      if (!correctPassword) {
+        return res.status(401).json({
+          error: "incorrect password",
+        });
+      } else {
+        const jwtToken = token(emailFound);
+        const refreshToken = jwt.sign(
+          { id: emailFound.id, email: emailFound.email, role: emailFound.role },
+          process.env.REFRESH_TOKEN_SECRET,
+          { expiresIn: "7d" },
+        );
+        res.cookie("accessToken", jwtToken, {
+          httpOnly: true,
+          sameSite: "lax",
+          secure: process.env.NODE_ENV === "production",
+          maxAge: 15 * 60 * 1000,
+        });
+
+        res.cookie("refreshToken", refreshToken, {
+          httpOnly: true,
+          sameSite: "lax",
+          secure: process.env.NODE_ENV === "production",
+          maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
+
+        return res.json({
+          id: emailFound.id,
+          name: emailFound.name,
+          email: emailFound.email,
+          role: emailFound.role,
+        });
+      }
+    }
+  } catch (error) {
+    res.status(500).json({ error: "error logging in" });
+  }
+}
+
 async function addComment(req, res) {
   try {
     const uID = req.user.id;
@@ -309,6 +367,7 @@ module.exports = {
   getPostsAndComments,
   createUser,
   loginUser,
+  loginAdmin,
   logout,
   addComment,
   addPost,

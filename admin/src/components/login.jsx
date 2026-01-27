@@ -1,8 +1,11 @@
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { useState } from "react";
 
-function Login({ user, setUser }) {
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
+function Login() {
+  const navigate = useNavigate();
+  const { setUser } = useOutletContext();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loginErrors, setLoginErrors] = useState(null);
   async function login(e) {
     e.preventDefault();
@@ -11,12 +14,13 @@ function Login({ user, setUser }) {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: JSON.stringify({
         email: email,
         password: password,
       }),
     });
-    const data = res.json();
+    const data = await res.json();
     if (!res.ok) {
       setLoginErrors(data.error);
     } else {
@@ -29,7 +33,7 @@ function Login({ user, setUser }) {
       {loginErrors ? (
         <div>
           {loginErrors.map((error) => {
-            -{ error };
+            <div>{error}</div>;
           })}
         </div>
       ) : null}
@@ -53,7 +57,7 @@ function Login({ user, setUser }) {
           />
         </div>
 
-        <button class="btn" type="submit" onClick={login}>
+        <button className="btn" type="submit">
           LOGIN
         </button>
       </form>

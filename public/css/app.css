@@ -31,7 +31,8 @@
 
 a,
 a:visited,
-.backHome {
+.backHome,
+.logout {
   color: black;
   cursor: pointer;
 }
@@ -57,6 +58,8 @@ a:visited,
 
 .backHome {
   text-decoration: none;
+  border: 1px solid black;
+  padding: 3px 18px;
 }
 
 .loginSignup {
