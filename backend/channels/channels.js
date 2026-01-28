@@ -243,14 +243,14 @@ async function postToEdit(req, res) {
     });
 
     if (!post) {
-      res.status(404).json({
+      return res.status(404).json({
         error: {
           type: "no post",
           message: "no post found",
         },
       });
     } else {
-      res.json({
+      return res.json({
         post,
       });
     }

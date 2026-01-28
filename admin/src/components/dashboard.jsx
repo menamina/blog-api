@@ -81,8 +81,7 @@ function Dashboard() {
 
   async function renderPost(postID) {
     try {
-      const postIDNum = Number(postID);
-      const res = await fetch(`http://localhost:5555/edit-post/${postIDNum}`, {
+      const res = await authFetch(`http://localhost:5555/edit-post/${postID}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -169,10 +168,14 @@ function Dashboard() {
                     {publishedPost.map((post) => (
                       <div key={post.id}>
                         <div className="left postDiv">
-                          <img
-                            src={`http://localhost:5555/api/multerIMG/${post.img}`}
-                            alt={post.title}
-                          />
+                          {post.img ? (
+                            <img
+                              src={`http://localhost:5555/api/multerIMG/${post.img}`}
+                              alt={post.title}
+                            />
+                          ) : (
+                            <div></div>
+                          )}
                         </div>
                         <div className="right postDiv">
                           <div>{post.createdAt}</div>
@@ -209,10 +212,14 @@ function Dashboard() {
                     {unpublishedPost.map((post) => (
                       <div key={post.id}>
                         <div className="left postDiv">
-                          <img
-                            src={`http://localhost:5555/api/multerIMG/${post.img}`}
-                            alt={post.title}
-                          />
+                          {post.img ? (
+                            <img
+                              src={`http://localhost:5555/api/multerIMG/${post.img}`}
+                              alt={post.title}
+                            />
+                          ) : (
+                            <div></div>
+                          )}
                         </div>
                         <div className="right postDiv">
                           <div>{post.createdAt}</div>

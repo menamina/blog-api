@@ -5,6 +5,7 @@ import App from "./app";
 import Login from "./components/login";
 import Dashboard from "./components/dashboard";
 import AddPost from "./components/newPost";
+import EditPost from "./components/editPost";
 
 const routes = createBrowserRouter([
   {
@@ -14,6 +15,7 @@ const routes = createBrowserRouter([
       { path: "/admin-login", element: <Login /> },
       { path: "/dashboard", element: <Dashboard /> },
       { path: "/new-post", element: <AddPost /> },
+      { path: "/edit-post/:postID", element: <EditPost /> },
     ],
   },
 ]);
