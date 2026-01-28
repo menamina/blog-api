@@ -17,7 +17,7 @@ router.post("/logout", remote.logout);
 // user
 router.post("/comments", remote.addComment);
 router.get("/api/whoAmINow", verifyToken, remote.checkMyToken);
-router.post("/api/refresh", verifyToken, remote.checkRefreshToken);
+router.post("/api/refresh", remote.checkRefreshToken);
 
 // admin
 router.post("/admin-login", remote.loginAdmin);

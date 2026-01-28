@@ -1,22 +1,21 @@
 const jwt = require("jsonwebtoken");
 
 function verifyToken(req, res, next) {
-  const token = req.cookies.accessToken || req.cookies.refreshToken;
+  const accessToken = req.cookies.accessToken;
   if (req.method === "OPTIONS") {
     return next();
   }
-  if (!token) {
+  if (!accessToken) {
     return res.status(401).json({ error: "you must be logged in" });
-  } else {
-    try {
-      const decoded = jwt.verify(token, process.env.JWTSECRET);
-      req.user = decoded;
-      next();
-    } catch (error) {
-      return res.status(403).json({
-        error: "invalid or expired token",
-      });
-    }
+  }
+  try {
+    const decoded = jwt.verify(accessToken, process.env.JWTSECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(403).json({
+      error: "invalid or expired token",
+    });
   }
 }
 

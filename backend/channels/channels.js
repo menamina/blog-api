@@ -211,7 +211,7 @@ async function addComment(req, res) {
 async function addPost(req, res) {
   try {
     const { title, body, published } = req.body;
-    const publishedBool = published === "true" ? true : false;
+    const publishedBool = published === "post" ? true : false;
 
     const imgFile = req.file;
     await prisma.posts.create({
@@ -323,7 +323,7 @@ async function checkMyToken(req, res) {
 
 async function checkRefreshToken(req, res, next) {
   try {
-    const refreshToken = req.cookies?.refreshToken;
+    const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
       return res.status(401).json({

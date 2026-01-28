@@ -44,7 +44,7 @@ function AddPost() {
             type="file"
             name="image"
             accept="image/*"
-            onChange={(e) => setImage(e.target.files)}
+            onChange={(e) => setImage(e.target.files[0])}
           ></input>
         </div>
         <div>

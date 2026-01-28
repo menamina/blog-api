@@ -77,6 +77,7 @@ function Dashboard() {
   const publishedPost = posts
     ? posts.filter((post) => post.published === true)
     : [];
+
   const unpublishedPost = posts
     ? posts.filter((post) => post.published === false)
     : [];

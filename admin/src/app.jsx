@@ -2,6 +2,28 @@ import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import "./css/app.css";
 
+async function authFetch(url, options = {}) {
+  let res = await fetch(url, {
+    ...options,
+    credentials: "include",
+  });
+
+  if (res.status === 401 || res.status === 403) {
+    const refreshRes = await fetch("http://localhost:5555/api/refresh", {
+      method: "POST",
+      credentials: "include",
+    });
+    if (!refreshRes.ok) {
+      throw new Error("Session expired");
+    }
+    res = await fetch(url, {
+      ...options,
+      credentials: "include",
+    });
+  }
+  return res;
+}
+
 function App() {
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(null);
@@ -12,47 +34,41 @@ function App() {
 
   useEffect(() => {
     async function getUser() {
-      const res = await fetch("http://localhost:5555/api/whoAmINow", {
-        credentials: "include",
-      });
+      try {
+        const res = await authFetch("http://localhost:5555/api/whoAmINow");
 
-      if (res.ok) {
-        const data = await res.json();
-        setUser(data);
+        if (res.ok) {
+          const data = await res.json();
+          setUser(data);
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        setUser(null);
+        console.log(error);
       }
     }
-
     getUser();
   }, []);
 
   useEffect(() => {
     async function getPosts() {
-      const res = await fetch("http://localhost:5555/dashboard", {
-        method: "GET",
-        credentials: "include",
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        if (data.error === "you must be logged in") {
-          setLoginErr("Please log in");
-          return;
-        } else if (
-          data.error === "you are not authorized to publish blog posts"
-        ) {
-          setIsAdmin(false);
-          setErrors(data.error);
-          return;
-        } else {
-          setErrors("Something went wrong");
-          setIsAdmin(false);
-          return;
+      try {
+        const res = await authFetch("http://localhost:5555/dashboard");
+
+        if (!res.ok) {
+          throw new Error("Not authorized");
         }
-      } else {
-        setIsAdmin(true);
+
+        const data = await res.json();
         setPosts(data);
+        setIsAdmin(true);
         setLoginErr(null);
         setErrors(null);
-        return;
+      } catch (error) {
+        setIsAdmin(false);
+        setErrors("You are not authorized");
+        console.log(error);
       }
     }
     getPosts();
