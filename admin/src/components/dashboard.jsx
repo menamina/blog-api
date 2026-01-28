@@ -39,10 +39,11 @@ function Dashboard() {
     setPostOpen,
     refreshPosts,
   } = useOutletContext();
+
   async function deletePost(postID) {
     try {
       const postIDNum = Number(postID);
-      const res = await fetch("http://localhost:5555/dashboard/delete-post", {
+      const res = await authFetch("http://localhost:5555/delete-post", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
