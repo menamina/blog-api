@@ -29,10 +29,13 @@ function Dashboard() {
     user,
     setUser,
     isAdmin,
+    setIsAdmin,
     posts,
     setPosts,
     loginErr,
+    setLoginErr,
     errors,
+    setErrors,
     setPostOpen,
     refreshPosts,
   } = useOutletContext();

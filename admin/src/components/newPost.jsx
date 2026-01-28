@@ -26,7 +26,7 @@ async function authFetch(url, options = {}) {
 
 function AddPost() {
   const navigate = useNavigate();
-  const { setRefreshPost } = useOutletContext;
+  const { setRefreshPost } = useOutletContext();
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [image, setImage] = useState("");

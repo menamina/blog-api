@@ -330,25 +330,41 @@ async function checkRefreshToken(req, res, next) {
       return res.status(401).json({
         message: "No refresh token provided",
       });
-    } else {
-      jwt.verify(
-        refreshToken,
-        process.env.REFRESH_TOKEN_SECRET,
-        (err, decoded) => {
-          if (err) {
-            return res.status(401).json({
-              message: "Invalid or expired refresh token",
-            });
-          }
-          req.user = {
-            id: decoded.id,
-            email: decoded.email,
-          };
-
-          next();
-        },
-      );
     }
+
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const user = await prisma.user.findUnique({
+      where: { id: decoded.id },
+    });
+
+    if (!user) {
+      return res.status(401).json({
+        message: "User not found",
+      });
+    }
+
+    const newAccessToken = token(user);
+    const newRefreshToken = jwt.sign(
+      { id: user.id, email: user.email, role: user.role },
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: "7d" },
+    );
+
+    res.cookie("accessToken", newAccessToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 15 * 60 * 1000,
+    });
+
+    res.cookie("refreshToken", newRefreshToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.json({ success: true });
   } catch (error) {
     return res.status(500).json({
       message: "Error checking refresh token",
