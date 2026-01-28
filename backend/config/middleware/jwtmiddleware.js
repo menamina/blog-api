@@ -21,13 +21,14 @@ function verifyToken(req, res, next) {
 }
 
 async function isAdmin(req, res, next) {
+  const role = req.user && req.user.role;
   if (role === "admin") {
-    next();
-  } else {
-    return res.status(403).json({
-      notAdmin: "you are not authorized to publish blog posts",
-    });
+    return next();
   }
+
+  return res.status(403).json({
+    error: "you are not authorized to publish blog posts",
+  });
 }
 
 module.exports = { verifyToken, isAdmin };

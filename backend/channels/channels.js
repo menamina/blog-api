@@ -9,7 +9,7 @@ const path = require("node:path");
 
 async function sendIMGS(req, res) {
   try {
-    const imgPath = Number(req.params.image);
+    const imgPath = req.params.image;
     const imgMulterPath = path.resolve("uploads", imgPath);
     return res.sendFile(imgMulterPath);
   } catch (error) {
@@ -211,13 +211,15 @@ async function addComment(req, res) {
 async function addPost(req, res) {
   try {
     const { title, body, published } = req.body;
+    const publishedBool = published === "true" ? true : false;
+
     const imgFile = req.file;
     await prisma.posts.create({
       data: {
         userID: req.user.id,
         title: title,
         body: body,
-        published: published,
+        published: publishedBool,
         img: imgFile ? imgFile.filename : null,
       },
     });
@@ -225,7 +227,8 @@ async function addPost(req, res) {
       message: "created post",
     });
   } catch (error) {
-    res.status(500).send("error commenting on this post");
+    console.error("addPost error:", error);
+    res.status(500).json({ error: "error creating post" });
   }
 }
 

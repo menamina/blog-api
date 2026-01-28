@@ -15,7 +15,7 @@ function AddPost() {
     formData.append("title", title);
     formData.append("body", body);
     if (image) formData.append("image", image);
-    formData.append("published", action === "post");
+    formData.append("published", action);
 
     const res = await fetch("http://localhost:5555/new-post", {
       method: "POST",
@@ -24,7 +24,7 @@ function AddPost() {
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data.error);
+      console.log(data.error.error);
     }
   }
   return (
@@ -44,7 +44,7 @@ function AddPost() {
             type="file"
             name="image"
             accept="image/*"
-            onChange={(e) => setImage(e.target.files[0])}
+            onChange={(e) => setImage(e.target.files)}
           ></input>
         </div>
         <div>

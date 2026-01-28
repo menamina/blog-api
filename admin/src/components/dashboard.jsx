@@ -118,7 +118,7 @@ function Dashboard() {
                       <div key={post.id}>
                         <div className="left postDiv">
                           <img
-                            src={`/api/multerIMG/${post.img}`}
+                            src={`http://localhost:5555/api/multerIMG/${post.img}`}
                             alt={post.title}
                           />
                         </div>
@@ -158,7 +158,7 @@ function Dashboard() {
                       <div key={post.id}>
                         <div className="left postDiv">
                           <img
-                            src={`/api/multerIMG/${post.img}`}
+                            src={`http://localhost:5555/api/multerIMG/${post.img}`}
                             alt={post.title}
                           />
                         </div>

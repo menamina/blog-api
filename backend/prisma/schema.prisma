@@ -28,7 +28,7 @@ model Posts {
   userID Int
   title String
   body String
-  img String
+  img String?
   createdAt DateTime @default(now())
   published Boolean @default(false)
 

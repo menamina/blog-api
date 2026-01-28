@@ -16,7 +16,10 @@ function Main() {
             <div>{postOpen.createdAt}</div>
             <div>{postOpen.title}</div>
             <div>
-              <img src={`api/multerIMG/${postOpen.img}`} alt={postOpen.title} />
+              <img
+                src={`http://localhost:5555/api/multerIMG/${postOpen.img}`}
+                alt={postOpen.title}
+              />
             </div>
             <div>{postOpen.body}</div>
             <div className="comments">
@@ -63,7 +66,10 @@ function Main() {
         posts.map((post) => {
           <div className="postDiv flex" onClick={openPost(e)} data-id={post.id}>
             <div className="left postDiv">
-              <img src={`api/multerIMG/${post.img}`} alt={post.title} />
+              <img
+                src={`http://localhost:5555/api/multerIMG/${post.img}`}
+                alt={post.title}
+              />
             </div>
             <div className="right postDiv">
               <div>{post.createdAt}</div>
