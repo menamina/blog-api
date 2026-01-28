@@ -223,6 +223,7 @@ async function addPost(req, res) {
         img: imgFile ? imgFile.filename : null,
       },
     });
+    console.log("req.file:", req.file);
     res.status(201).json({
       message: "created post",
     });

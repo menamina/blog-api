@@ -1,8 +1,32 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useOutletContext } from "react-router-dom";
 import "../css/app.css";
 
+async function authFetch(url, options = {}) {
+  let res = await fetch(url, {
+    ...options,
+    credentials: "include",
+  });
+
+  if (res.status === 401 || res.status === 403) {
+    const refreshRes = await fetch("http://localhost:5555/api/refresh", {
+      method: "POST",
+      credentials: "include",
+    });
+    if (!refreshRes.ok) {
+      throw new Error("Session expired");
+    }
+    res = await fetch(url, {
+      ...options,
+      credentials: "include",
+    });
+  }
+  return res;
+}
+
 function AddPost() {
+  const navigate = useNavigate();
+  const { setRefreshPost } = useOutletContext;
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [image, setImage] = useState("");
@@ -17,15 +41,18 @@ function AddPost() {
     if (image) formData.append("image", image);
     formData.append("published", action);
 
-    const res = await fetch("http://localhost:5555/new-post", {
+    const res = await authFetch("http://localhost:5555/new-post", {
       method: "POST",
       credentials: "include",
       body: formData,
     });
     const data = await res.json();
     if (!res.ok) {
-      console.log(data.error.error);
+      return console.log(data.error.error);
     }
+    setRefreshPost((prev) => prev + 1);
+    navigate("/dashboard");
+    return;
   }
   return (
     <div className="newPostDiv">

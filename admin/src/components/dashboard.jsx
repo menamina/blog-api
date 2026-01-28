@@ -1,5 +1,28 @@
 import { Link, useOutletContext } from "react-router-dom";
+import { useState, useEffect } from "react";
 import "../css/app.css";
+
+async function authFetch(url, options = {}) {
+  let res = await fetch(url, {
+    ...options,
+    credentials: "include",
+  });
+
+  if (res.status === 401 || res.status === 403) {
+    const refreshRes = await fetch("http://localhost:5555/api/refresh", {
+      method: "POST",
+      credentials: "include",
+    });
+    if (!refreshRes.ok) {
+      throw new Error("Session expired");
+    }
+    res = await fetch(url, {
+      ...options,
+      credentials: "include",
+    });
+  }
+  return res;
+}
 
 function Dashboard() {
   const {
@@ -11,6 +34,7 @@ function Dashboard() {
     loginErr,
     errors,
     setPostOpen,
+    refreshPosts,
   } = useOutletContext();
   async function deletePost(postID) {
     try {
@@ -81,6 +105,29 @@ function Dashboard() {
   const unpublishedPost = posts
     ? posts.filter((post) => post.published === false)
     : [];
+
+  useEffect(() => {
+    async function getPosts() {
+      try {
+        const res = await authFetch("http://localhost:5555/dashboard");
+
+        if (!res.ok) {
+          throw new Error("Not authorized");
+        }
+
+        const data = await res.json();
+        setPosts(data);
+        setIsAdmin(true);
+        setLoginErr(null);
+        setErrors(null);
+      } catch (error) {
+        setIsAdmin(false);
+        setErrors("You are not authorized");
+        console.log(error);
+      }
+    }
+    getPosts();
+  }, [refreshPosts]);
 
   return (
     <div>

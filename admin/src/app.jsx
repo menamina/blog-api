@@ -31,6 +31,7 @@ function App() {
   const [posts, setPosts] = useState([]);
   const [loginErr, setLoginErr] = useState([]);
   const [errors, setErrors] = useState(null);
+  const [refreshPosts, setRefreshPost] = useState(0);
 
   useEffect(() => {
     async function getUser() {
@@ -51,29 +52,6 @@ function App() {
     getUser();
   }, []);
 
-  useEffect(() => {
-    async function getPosts() {
-      try {
-        const res = await authFetch("http://localhost:5555/dashboard");
-
-        if (!res.ok) {
-          throw new Error("Not authorized");
-        }
-
-        const data = await res.json();
-        setPosts(data);
-        setIsAdmin(true);
-        setLoginErr(null);
-        setErrors(null);
-      } catch (error) {
-        setIsAdmin(false);
-        setErrors("You are not authorized");
-        console.log(error);
-      }
-    }
-    getPosts();
-  }, [user]);
-
   return (
     <div className="grandDiv">
       <Outlet
@@ -87,6 +65,8 @@ function App() {
           setPostOpen,
           loginErr,
           errors,
+          refreshPosts,
+          setRefreshPost,
         }}
       ></Outlet>
     </div>
