@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 
-function EditPost({ postOpen, setPostOpen }) {
+function EditPost() {
+  const { postOpen, setPostOpen } = useOutletContext();
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
   const [title, setTitle] = useState(null);
@@ -10,6 +11,9 @@ function EditPost({ postOpen, setPostOpen }) {
 
   useEffect(() => {
     if (!postOpen || !postOpen.post) return;
+    setTitle(postOpen.post.title || "");
+    setBody(postOpen.post.body || "");
+    setPublished(Boolean(postOpen.post.published));
     if (postOpen.post.commentsOnThisPost.length === 0) {
       setComments([]);
     } else {
@@ -151,7 +155,7 @@ function EditPost({ postOpen, setPostOpen }) {
             </form>
           </div>
           <div>
-            {postOpen.post.commentsOnThisPost.length === 0 ? (
+            {postOpen.post?.commentsOnThisPost.length === 0 ? (
               <div>no comments yet</div>
             ) : (
               <div className="showHideComm" onClick={viewComments}>
