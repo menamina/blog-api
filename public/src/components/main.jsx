@@ -1,11 +1,71 @@
-import { Link, useOutletContext } from "react-router-dom";
+import { Link, useOutletContext, useNavigate } from "react-router-dom";
+import { useState } from "react";
+
+async function authFetch(url, options = {}) {
+  let res = await fetch(url, {
+    ...options,
+    credentials: "include",
+  });
+
+  if (res.status === 401 || res.status === 403) {
+    const refreshRes = await fetch("http://localhost:5555/api/refresh", {
+      method: "POST",
+      credentials: "include",
+    });
+    if (!refreshRes.ok) {
+      throw new Error("Session expired");
+    }
+    res = await fetch(url, {
+      ...options,
+      credentials: "include",
+    });
+  }
+  return res;
+}
 
 function Main() {
   const { posts, postOpen, setPostOpen, user } = useOutletContext();
+  const navigate = useNavigate();
+  const [postID, setpostID] = useState("");
+  const [comment, setComment] = useState("");
+
   function openPost(e) {
     const postID = e.currentTarget.dataset.id;
+    setpostID(postID);
     const post = posts.find((post) => post.id === Number(postID));
     setPostOpen(post);
+  }
+
+  function closePost(setPostOpen) {
+    setPostOpen(null);
+    setpostID(null);
+  }
+
+  async function addComment(e) {
+    try {
+      e.preventDefault();
+
+      const formData = new FormData();
+
+      formData.append("comment", comment);
+
+      const res = authFetch("https://localhost:5555/comments", {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+      });
+      const data = res.json();
+
+      if (res.ok) {
+        setPostOpen(null);
+        setpostID(null);
+        navigate("/");
+      } else {
+        console.log(data.error);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -28,11 +88,20 @@ function Main() {
                 <div className="line"></div>
                 <div>
                   {user ? (
-                    <div>
-                      <input placeholder="Write a comment.."></input>
-                      <button>cancel</button>
-                      <button>post</button>
-                    </div>
+                    <form onSubmit={addComment}>
+                      <div>
+                        <input
+                          placeholder="Write a comment.."
+                          name="comment"
+                          value={comment}
+                          onChange={(e) => setComment(e.target.value)}
+                        ></input>
+                        <Link to="/" onClick={closePost}>
+                          cancel
+                        </Link>
+                        <button>post</button>
+                      </div>
+                    </form>
                   ) : (
                     <div>
                       <div>
@@ -64,23 +133,25 @@ function Main() {
         </div>
       ) : (
         posts.map((post) => {
-          <div className="postDiv flex" onClick={openPost(e)} data-id={post.id}>
-            <div className="left postDiv">
-              <img
-                src={`http://localhost:5555/api/multerIMG/${post.img}`}
-                alt={post.title}
-              />
-            </div>
-            <div className="right postDiv">
-              <div>{post.createdAt}</div>
-              <div>{post.title}</div>
-              <div>{post.body.splice(0, 15)}...</div>
-              <div className="line"></div>
-              <div>
-                <div>{post.commentsOnThisPost.length} comments</div>
+          return (
+            <div className="postDiv flex" onClick={openPost} data-id={post.id}>
+              <div className="left postDiv">
+                <img
+                  src={`http://localhost:5555/api/multerIMG/${post.img}`}
+                  alt={post.title}
+                />
+              </div>
+              <div className="right postDiv">
+                <div>{post.createdAt}</div>
+                <div>{post.title}</div>
+                <div>{post.body.slice(0, 15)}...</div>
+                <div className="line"></div>
+                <div>
+                  <div>{post.commentsOnThisPost.length} comments</div>
+                </div>
               </div>
             </div>
-          </div>;
+          );
         })
       )}
     </div>

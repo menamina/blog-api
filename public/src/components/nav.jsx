@@ -10,10 +10,15 @@ function Nav({ user, setUser }) {
 
     setUser(null);
   }
+
+  function closePost(setPostOpen) {
+    setPostOpen(null);
+  }
+
   return (
     <div className="nav">
       <div>
-        <Link className="backHome" to="/blog">
+        <Link className="backHome" to="/" onClick={closePost}>
           BLOG
         </Link>
       </div>

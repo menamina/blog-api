@@ -25,7 +25,7 @@ function Login() {
       setErrors(data.error);
     } else {
       setUser(data);
-      navigate("/blog");
+      navigate("/");
     }
   }
   return (

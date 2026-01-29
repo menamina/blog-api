@@ -33,7 +33,7 @@ function App() {
   useEffect(() => {
     async function getPosts() {
       try {
-        const res = await fetch("http://localhost:5555/blog");
+        const res = await fetch("http://localhost:5555/");
         if (!res.ok) {
           throw new Error("Failed to fetch posts");
         } else {
@@ -51,7 +51,7 @@ function App() {
 
   return (
     <div className="grandDiv">
-      <Nav user={user} setUser={setUser}></Nav>
+      <Nav user={user} setUser={setUser} closePost={setPostOpen}></Nav>
       <div className="blog holder flex">
         <SideBar></SideBar>
         <Outlet
