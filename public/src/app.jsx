@@ -13,16 +13,30 @@ function App() {
   useEffect(() => {
     async function verifyUser() {
       try {
-        const res = await fetch("http://localhost:5555/api/whoAmINow", {
+        let res = await fetch("http://localhost:5555/api/whoAmINow", {
           credentials: "include",
         });
 
+        if (res.status === 401 || res.status === 403) {
+          const refreshRes = await fetch("http://localhost:5555/api/refresh", {
+            method: "POST",
+            credentials: "include",
+          });
+
+          if (refreshRes.ok) {
+            res = await fetch("http://localhost:5555/api/whoAmINow", {
+              credentials: "include",
+            });
+          }
+        }
+
         if (!res.ok) {
           setUser(null);
-        } else {
-          const userData = await res.json();
-          setUser(userData);
+          return;
         }
+
+        const userData = await res.json();
+        setUser(userData);
       } catch {
         setUser(null);
       }
@@ -55,7 +69,15 @@ function App() {
       <div className="blog holder flex">
         <SideBar></SideBar>
         <Outlet
-          context={{ posts, postErr, user, setUser, postOpen, setPostOpen }}
+          context={{
+            posts,
+            setPosts,
+            postErr,
+            user,
+            setUser,
+            postOpen,
+            setPostOpen,
+          }}
         ></Outlet>
       </div>
     </div>

@@ -193,18 +193,33 @@ async function loginAdmin(req, res) {
 
 async function addComment(req, res) {
   try {
-    const uID = req.user.id;
+    const uID = req.user?.id;
     const { postID, comment } = req.body;
+
+    if (!uID) {
+      return res.status(401).json({ error: "Not authenticated" });
+    }
+
+    if (!postID || !comment) {
+      return res.status(400).json({ error: "postID and comment are required" });
+    }
+
+    const postIdInt = Number(postID);
+    if (Number.isNaN(postIdInt)) {
+      return res.status(400).json({ error: "postID must be a number" });
+    }
+
     await prisma.comments.create({
       data: {
         userID: uID,
-        postID: postID,
+        postID: postIdInt,
         comment: comment,
       },
     });
-    res.status(200).json({ success: "success" });
+    res.status(201).json({ success: true });
   } catch (error) {
-    res.status(500).send("error commenting on this post");
+    console.error("addComment error", error);
+    res.status(500).json({ error: "error commenting on this post" });
   }
 }
 
@@ -365,10 +380,10 @@ async function checkRefreshToken(req, res, next) {
     });
 
     return res.json({
-      id: req.user.id,
-      name: req.user.name,
-      email: req.user.email,
-      role: req.user.role,
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
     });
   } catch (error) {
     return res.status(500).json({

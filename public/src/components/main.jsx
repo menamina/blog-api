@@ -24,7 +24,7 @@ async function authFetch(url, options = {}) {
 }
 
 function Main() {
-  const { posts, postOpen, setPostOpen, user } = useOutletContext();
+  const { posts, setPosts, postOpen, setPostOpen, user } = useOutletContext();
   const navigate = useNavigate();
   const [postID, setpostID] = useState("");
   const [comment, setComment] = useState("");
@@ -45,23 +45,39 @@ function Main() {
     try {
       e.preventDefault();
 
-      const formData = new FormData();
+      console.log(postID, comment);
 
-      formData.append("comment", comment);
-
-      const res = authFetch("https://localhost:5555/comments", {
+      const res = await authFetch("http://localhost:5555/comments", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         credentials: "include",
-        body: formData,
+        body: JSON.stringify({
+          postID: Number(postID),
+          comment,
+        }),
       });
-      const data = res.json();
+
+      const data = await res.json();
 
       if (res.ok) {
+        // refresh posts so comment counts stay accurate
+        try {
+          const refreshed = await fetch("http://localhost:5555/");
+          if (refreshed.ok) {
+            const refreshedPosts = await refreshed.json();
+            setPosts(refreshedPosts);
+          }
+        } catch (err) {
+          console.log("failed to refresh posts", err);
+        }
+
         setPostOpen(null);
         setpostID(null);
+        setComment("");
         navigate("/");
       } else {
-        console.log(data.error);
+        console.log(postID);
+        console.log("errrr", data.error);
       }
     } catch (error) {
       console.log(error);
@@ -116,7 +132,7 @@ function Main() {
                 {postOpen.commentsOnThisPost.length === 0
                   ? null
                   : postOpen.commentsOnThisPost.map((comment) => (
-                      <div className="COMMENT" key={comment.createdAt}>
+                      <div className="COMMENT" key={comment.id}>
                         <div>
                           <img src="" alt="" />
                         </div>
@@ -134,7 +150,12 @@ function Main() {
       ) : (
         posts.map((post) => {
           return (
-            <div className="postDiv flex" onClick={openPost} data-id={post.id}>
+            <div
+              className="postDiv flex"
+              onClick={openPost}
+              data-id={post.id}
+              key={post.id}
+            >
               <div className="left postDiv">
                 <img
                   src={`http://localhost:5555/api/multerIMG/${post.img}`}
