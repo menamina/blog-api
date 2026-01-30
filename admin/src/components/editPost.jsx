@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate, useOutletContext } from "react-router-dom";
 
 async function authFetch(url, options = {}) {
   let res = await fetch(url, {
@@ -24,6 +24,7 @@ async function authFetch(url, options = {}) {
 }
 
 function EditPost() {
+  const { user } = useOutletContext();
   const [postOpen, setPostOpen] = useState("");
   const navigate = useNavigate();
   const { postID } = useParams();
@@ -158,7 +159,9 @@ function EditPost() {
 
   return (
     <div>
-      {!postOpen ? (
+      {!user ? (
+        <div>you are not logged in</div>
+      ) : !postOpen ? (
         <div>Loading</div>
       ) : (
         <div>
@@ -243,6 +246,7 @@ function EditPost() {
           </div>
         </div>
       )}
+  
     </div>
   );
 }

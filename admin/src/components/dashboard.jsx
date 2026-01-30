@@ -1,5 +1,5 @@
 import { Link, useOutletContext } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import "../css/app.css";
 
 async function authFetch(url, options = {}) {
@@ -123,7 +123,7 @@ function Dashboard() {
             </div>
             <div>Hi, {user?.name}</div>
             <div>
-              <Link to="/admin-login" onClick={logout}>
+              <Link to="/" onClick={logout}>
                 LOGOUT
               </Link>
             </div>
