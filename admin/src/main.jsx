@@ -13,7 +13,6 @@ const routes = createBrowserRouter([
     element: <App />,
     children: [
       { path: "/", element: <Login /> },
-      { path: "/admin-login", element: <Login /> },
       { path: "/dashboard", element: <Dashboard /> },
       { path: "/new-post", element: <AddPost /> },
       { path: "/edit-post/:postID", element: <EditPost /> },

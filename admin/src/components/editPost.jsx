@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useOutletContext, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
 async function authFetch(url, options = {}) {
   let res = await fetch(url, {
@@ -25,6 +25,7 @@ async function authFetch(url, options = {}) {
 
 function EditPost() {
   const [postOpen, setPostOpen] = useState("");
+  const navigate = useNavigate();
   const { postID } = useParams();
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState("");
@@ -51,6 +52,9 @@ function EditPost() {
           console.log("sorry");
         } else {
           setPostOpen(data);
+          setTitle(data.post.title);
+          setBody(data.post.body);
+          setPublished(data.post.published);
           setComments(data.post.commentsOnThisPost);
         }
       } catch (error) {
@@ -87,7 +91,8 @@ function EditPost() {
         console.log(data.error);
         return;
       }
-      setPostOpen(false);
+      setPostOpen(null);
+      navigate("/dashboard");
     } catch (err) {
       console.log("error");
       console.error(err);
@@ -163,7 +168,7 @@ function EditPost() {
               <div>
                 <label>Title:</label>
                 <input
-                  value={postOpen.post.title}
+                  value={title}
                   name="title"
                   onChange={(e) => setTitle(e.target.value)}
                 ></input>
@@ -181,7 +186,7 @@ function EditPost() {
               <div>
                 <label>Body:</label>
                 <input
-                  value={postOpen.post.body}
+                  value={body}
                   name="body"
                   onChange={(e) => setBody(e.target.value)}
                 ></input>
@@ -190,7 +195,7 @@ function EditPost() {
                 <label>Published:</label>
                 <input
                   type="checkbox"
-                  checked={postOpen.post.published}
+                  checked={published}
                   onChange={(e) => setPublished(e.target.checked)}
                 />
               </div>
@@ -214,7 +219,7 @@ function EditPost() {
               <div>
                 {comments.map((comment) => {
                   return (
-                    <div className="COMMENT" key={comment.createdAt}>
+                    <div className="COMMENT" key={comment.id}>
                       <div>
                         <img src="" alt="" />
                       </div>
