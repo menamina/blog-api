@@ -60,7 +60,6 @@ function Main() {
       const data = await res.json();
 
       if (res.ok) {
-        // refresh posts so comment counts stay accurate
         try {
           const refreshed = await fetch("http://localhost:5555/");
           if (refreshed.ok) {

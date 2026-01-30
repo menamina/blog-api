@@ -248,6 +248,24 @@ async function addPost(req, res) {
   }
 }
 
+async function getPostToEdit(req, res) {
+  try {
+    const { postID } = req.params;
+    const numPostID = Number(postID);
+    const post = await prisma.post.findUnique({
+      where: { id: numPostID },
+    });
+
+    if (!post) {
+      console.log("no post to edit");
+    } else {
+      res.json({ post });
+    }
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+
 async function postToEdit(req, res) {
   try {
     const { postID } = req.params;
@@ -412,6 +430,7 @@ module.exports = {
   logout,
   addComment,
   addPost,
+  getPostToEdit,
   postToEdit,
   postEdit,
   deletePost,

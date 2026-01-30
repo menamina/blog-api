@@ -36,7 +36,6 @@ function Dashboard() {
     setLoginErr,
     errors,
     setErrors,
-    setPostOpen,
     refreshPosts,
   } = useOutletContext();
 
@@ -76,28 +75,6 @@ function Dashboard() {
     });
     if (res.ok) {
       setUser(null);
-    }
-  }
-
-  async function renderPost(postID) {
-    try {
-      const res = await authFetch(`http://localhost:5555/edit-post/${postID}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        console.log(data.message);
-      } else {
-        setPostOpen(data.post || data);
-      }
-    } catch (error) {
-      console.log(error.message || error);
     }
   }
 
@@ -188,12 +165,7 @@ function Dashboard() {
                           <div className="postActions">
                             <div onClick={() => deletePost(post.id)}>X</div>
                             <div>
-                              <Link
-                                to={`/edit-post/${post.id}`}
-                                onClick={() => renderPost(post.id)}
-                              >
-                                edit
-                              </Link>
+                              <Link to={`/edit-post/${post.id}`}>edit</Link>
                             </div>
                           </div>
                         </div>

@@ -29,8 +29,20 @@ router.post(
   remote.addPost,
 );
 
-router.get("/edit-post/:postID", verifyToken, isAdmin, remote.postToEdit);
-router.put("/edit-post/:postID", verifyToken, isAdmin, remote.postEdit);
+router.get(
+  "/edit-post/:postID",
+  verifyToken,
+  isAdmin,
+  multer.single("image"),
+  remote.postToEdit,
+);
+router.put(
+  "/edit-post/:postID",
+  verifyToken,
+  isAdmin,
+  multer.single("image"),
+  remote.postEdit,
+);
 router.delete("/delete-post", verifyToken, isAdmin, remote.deletePost);
 router.delete(
   "/dashboard/delete-comments",

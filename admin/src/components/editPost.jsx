@@ -1,34 +1,70 @@
 import { useState, useEffect } from "react";
-import { Link, useOutletContext } from "react-router-dom";
+import { Link, useOutletContext, useParams } from "react-router-dom";
+
+async function authFetch(url, options = {}) {
+  let res = await fetch(url, {
+    ...options,
+    credentials: "include",
+  });
+
+  if (res.status === 401 || res.status === 403) {
+    const refreshRes = await fetch("http://localhost:5555/api/refresh", {
+      method: "POST",
+      credentials: "include",
+    });
+    if (!refreshRes.ok) {
+      throw new Error("Session expired");
+    }
+    res = await fetch(url, {
+      ...options,
+      credentials: "include",
+    });
+  }
+  return res;
+}
 
 function EditPost() {
-  const { postOpen, setPostOpen } = useOutletContext();
+  const [postOpen, setPostOpen] = useState(null);
+  const { postID } = useParams();
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
-  const [title, setTitle] = useState(null);
-  const [body, setBody] = useState(null);
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [image, setImage] = useState("");
   const [published, setPublished] = useState(false);
 
   useEffect(() => {
-    if (!postOpen || !postOpen.post) return;
-    setTitle(postOpen.post.title || "");
-    setBody(postOpen.post.body || "");
-    setPublished(Boolean(postOpen.post.published));
-    if (postOpen.post.commentsOnThisPost.length === 0) {
-      setComments([]);
-    } else {
-      const comments = postOpen.post.commentsOnThisPost.map(
-        (comment) => comment,
-      );
-      setComments(comments);
+    async function renderOpenPost() {
+      try {
+        const res = await authFetch(
+          `https://localhost:5555/edit-post/${postID}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+          },
+        );
+        const data = await res.json();
+        if (!res.ok) {
+          console.log("sorry");
+        } else {
+          setPostOpen(data);
+          setComments(data.post.commentsOnThisPost);
+        }
+      } catch (error) {
+        console.log("whoops", error);
+      }
     }
-  }, [postOpen]);
+    renderOpenPost();
+  }, [postID]);
 
   async function updatePost(e) {
     e.preventDefault();
 
     try {
-      const res = await fetch(
+      const res = await authFetch(
         `http://localhost:5555/edit-post/${postOpen.post.id}`,
         {
           method: "PUT",
@@ -64,7 +100,7 @@ function EditPost() {
 
   async function deleteComment(commentID, postID) {
     try {
-      const res = await fetch(
+      const res = await authFetch(
         "http://localhost:5555/dashboard/delete-comments",
         {
           method: "DELETE",
@@ -118,7 +154,7 @@ function EditPost() {
   return (
     <div>
       {!postOpen ? (
-        <div>No post</div>
+        <div>Loading</div>
       ) : (
         <div>
           <div>
@@ -127,15 +163,25 @@ function EditPost() {
               <div>
                 <label>Title:</label>
                 <input
-                  value={title}
+                  value={postOpen.post.title}
                   name="title"
                   onChange={(e) => setTitle(e.target.value)}
                 ></input>
               </div>
               <div>
+                <label>Image:</label>
+                <img src={`/api/multerIMG/${post.img}`}></img>
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  onChange={(e) => setImage(e.target.value)}
+                ></input>
+              </div>
+              <div>
                 <label>Body:</label>
                 <input
-                  value={body}
+                  value={postOpen.post.body}
                   name="body"
                   onChange={(e) => setBody(e.target.value)}
                 ></input>
@@ -144,7 +190,7 @@ function EditPost() {
                 <label>Published:</label>
                 <input
                   type="checkbox"
-                  checked={published}
+                  checked={postOpen.post.published}
                   onChange={(e) => setPublished(e.target.checked)}
                 />
               </div>
@@ -155,7 +201,7 @@ function EditPost() {
             </form>
           </div>
           <div>
-            {postOpen.post?.commentsOnThisPost.length === 0 ? (
+            {postOpen.post.commentsOnThisPost.length === 0 ? (
               <div>no comments yet</div>
             ) : (
               <div className="showHideComm" onClick={viewComments}>
