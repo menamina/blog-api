@@ -24,10 +24,10 @@ async function authFetch(url, options = {}) {
 }
 
 function EditPost() {
-  const [postOpen, setPostOpen] = useState(null);
+  const [postOpen, setPostOpen] = useState("");
   const { postID } = useParams();
   const [showComments, setShowComments] = useState(false);
-  const [comments, setComments] = useState([]);
+  const [comments, setComments] = useState("");
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [image, setImage] = useState("");
@@ -37,7 +37,7 @@ function EditPost() {
     async function renderOpenPost() {
       try {
         const res = await authFetch(
-          `https://localhost:5555/edit-post/${postID}`,
+          `http://localhost:5555/edit-post/${postID}`,
           {
             method: "GET",
             headers: {
@@ -170,7 +170,7 @@ function EditPost() {
               </div>
               <div>
                 <label>Image:</label>
-                <img src={`/api/multerIMG/${post.img}`}></img>
+                <img src={`/api/multerIMG/${postOpen.post.img}`}></img>
                 <input
                   type="file"
                   name="image"
@@ -201,7 +201,7 @@ function EditPost() {
             </form>
           </div>
           <div>
-            {postOpen.post.commentsOnThisPost.length === 0 ? (
+            {comments.length === 0 ? (
               <div>no comments yet</div>
             ) : (
               <div className="showHideComm" onClick={viewComments}>

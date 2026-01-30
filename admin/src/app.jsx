@@ -61,8 +61,6 @@ function App() {
           setIsAdmin,
           posts,
           setPosts,
-          postOpen,
-          setPostOpen,
           loginErr,
           setLoginErr,
           errors,
