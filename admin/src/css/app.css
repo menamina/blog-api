@@ -6,7 +6,101 @@
 
 .grandDiv {
   height: 100vh;
-  width: 100vw;
+  width: 100%;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  font-size: 1.5rem;
+  width: 100%;
+}
+
+a,
+a:visited {
+  color: black;
+}
+
+.adminDash {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 30px;
+  overflow-x: hidden;
+}
+
+.published,
+.draft {
+  font-size: 2rem;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgb(183, 183, 183);
+}
+
+.draft {
+  margin-top: 30px;
+}
+
+.postGrid {
+  margin-top: 15px;
+  display: grid;
+  grid-template-columns: repeat(5, 250px);
+  gap: 30px;
+  width: 100%;
+}
+
+.postCard {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e1e1e1;
+  border-radius: 10px;
+  overflow: hidden;
+  min-height: 360px;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.postDiv.left {
+  height: 150px;
+  background: #f6f6f6;
+}
+
+.postDiv.right {
+  flex: 1;
+  padding: 12px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.postCard img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.imgPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    45deg,
+    #f1f1f1,
+    #f1f1f1 12px,
+    #e7e7e7 12px,
+    #e7e7e7 24px
+  );
+}
+
+.postActions {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
+}
+
+img {
+  width: 100%;
 }
 
 .main {
@@ -49,6 +143,10 @@ input {
   border: none;
   align-self: center;
   margin-top: 30px;
+  cursor: pointer;
+}
+
+.dlt {
   cursor: pointer;
 }
 

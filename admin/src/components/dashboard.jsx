@@ -143,7 +143,7 @@ function Dashboard() {
                 ) : (
                   <div className="postGrid">
                     {publishedPost.map((post) => (
-                      <div key={post.id}>
+                      <div className="postCard" key={post.id}>
                         <div className="left postDiv">
                           {post.img ? (
                             <img
@@ -151,7 +151,7 @@ function Dashboard() {
                               alt={post.title}
                             />
                           ) : (
-                            <div></div>
+                            <div className="imgPlaceholder"></div>
                           )}
                         </div>
                         <div className="right postDiv">
@@ -163,9 +163,14 @@ function Dashboard() {
                             {(post.commentsOnThisPost || []).length} comments
                           </div>
                           <div className="postActions">
-                            <div onClick={() => deletePost(post.id)}>X</div>
                             <div>
                               <Link to={`/edit-post/${post.id}`}>edit</Link>
+                            </div>
+                            <div
+                              className="dlt"
+                              onClick={() => deletePost(post.id)}
+                            >
+                              X
                             </div>
                           </div>
                         </div>
@@ -182,7 +187,7 @@ function Dashboard() {
                 ) : (
                   <div className="postGrid">
                     {unpublishedPost.map((post) => (
-                      <div key={post.id}>
+                      <div className="postCard" key={post.id}>
                         <div className="left postDiv">
                           {post.img ? (
                             <img
@@ -190,7 +195,7 @@ function Dashboard() {
                               alt={post.title}
                             />
                           ) : (
-                            <div></div>
+                            <div className="imgPlaceholder"></div>
                           )}
                         </div>
                         <div className="right postDiv">
@@ -202,11 +207,16 @@ function Dashboard() {
                             {(post.commentsOnThisPost || []).length} comments
                           </div>
                           <div className="postActions">
-                            <div onClick={() => deletePost(post.id)}>X</div>
                             <div>
                               <Link to={`/dashboard/edit/${post.id}`}>
                                 edit
                               </Link>
+                            </div>
+                            <div
+                              className="dlt"
+                              onClick={() => deletePost(post.id)}
+                            >
+                              X
                             </div>
                           </div>
                         </div>
