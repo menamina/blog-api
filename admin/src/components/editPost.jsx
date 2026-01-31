@@ -1,5 +1,10 @@
 import { useState, useEffect } from "react";
-import { Link, useParams, useNavigate, useOutletContext } from "react-router-dom";
+import {
+  Link,
+  useParams,
+  useNavigate,
+  useOutletContext,
+} from "react-router-dom";
 
 async function authFetch(url, options = {}) {
   let res = await fetch(url, {
@@ -68,35 +73,32 @@ function EditPost() {
   async function updatePost(e) {
     e.preventDefault();
 
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("body", body);
+    if (image) formData.append("image", image);
+    formData.append("published", published);
+
     try {
       const res = await authFetch(
         `http://localhost:5555/edit-post/${postOpen.post.id}`,
         {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
           credentials: "include",
-          body: JSON.stringify({
-            postID: postOpen.post.id,
-            title,
-            body,
-            published,
-          }),
+          body: formData,
         },
       );
 
       const data = await res.json();
 
       if (!res.ok) {
-        console.log(data.error);
+        console.log("err", data.error);
         return;
       }
       setPostOpen(null);
       navigate("/dashboard");
-    } catch (err) {
-      console.log("error");
-      console.error(err);
+    } catch (error) {
+      console.log("error", error);
     }
   }
 
@@ -183,7 +185,7 @@ function EditPost() {
                   type="file"
                   name="image"
                   accept="image/*"
-                  onChange={(e) => setImage(e.target.value)}
+                  onChange={(e) => setImage(e.target.files[0])}
                 ></input>
               </div>
               <div>
@@ -246,7 +248,6 @@ function EditPost() {
           </div>
         </div>
       )}
-  
     </div>
   );
 }

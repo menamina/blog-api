@@ -27,7 +27,7 @@ async function authFetch(url, options = {}) {
 function App() {
   const [user, setUser] = useState(null);
   const [isAdmin, setIsAdmin] = useState(null);
-  const [postOpen, setPostOpen] = useStatE(null);
+  const [postOpen, setPostOpen] = useState(null);
   const [posts, setPosts] = useState([]);
   const [loginErr, setLoginErr] = useState([]);
   const [errors, setErrors] = useState(null);

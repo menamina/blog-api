@@ -291,28 +291,31 @@ async function postToEdit(req, res) {
       });
     }
   } catch (error) {
-    res.status(500).send("error editing post");
+    res.status(500).json({ error: "error editing post" });
   }
 }
 
 async function postEdit(req, res) {
   try {
-    const { postID, title, body, published } = req.body;
-    const imgFile = req.image;
+    const { title, body, published } = req.body;
+    const { postID } = req.params;
+    const numPostID = Number(postID);
+    const bool = published === "true" ? true : false;
+    const imgFile = req.file;
     await prisma.posts.updateMany({
-      where: { id: Number(postID), userID: req.user.id },
+      where: { id: numPostID, userID: req.user.id },
       data: {
         title: title,
         body: body,
-        published: published,
-        img: imgFile ? `/api/multerIMG/${imgFile.filename}` : undefined,
+        published: bool,
+        img: imgFile ? imgFile.filename : undefined,
       },
     });
     res.status(201).json({
       message: "post edited",
     });
   } catch (error) {
-    res.status(500).send("error editing post");
+    res.status(500).json({ error: "error editing post" });
   }
 }
 
