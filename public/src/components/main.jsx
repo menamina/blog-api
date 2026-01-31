@@ -36,7 +36,7 @@ function Main() {
     setPostOpen(post);
   }
 
-  function closePost(setPostOpen) {
+  function closePost() {
     setPostOpen(null);
     setpostID(null);
   }
@@ -150,7 +150,7 @@ function Main() {
         posts.map((post) => {
           return (
             <div
-              className="postDiv flex"
+              className="postDivflex"
               onClick={openPost}
               data-id={post.id}
               key={post.id}
@@ -161,13 +161,19 @@ function Main() {
                   alt={post.title}
                 />
               </div>
-              <div className="right postDiv">
-                <div>{post.createdAt}</div>
-                <div>{post.title}</div>
-                <div>{post.body.slice(0, 15)}...</div>
-                <div className="line"></div>
+              <div className="rightpostDiv">
+                <div className="postData">
+                  <div className="date">{post.createdAt}</div>
+                  <div className="title">{post.title}</div>
+                  <div className="blurbs">{post.body.slice(0, 30)}...</div>
+                </div>
                 <div>
-                  <div>{post.commentsOnThisPost.length} comments</div>
+                  <div className="line"></div>
+                  {post.commentsOnThisPost.length === 1 ? (
+                    <div>{post.commentsOnThisPost.length} comment</div>
+                  ) : (
+                    <div>{post.commentsOnThisPost.length} comments</div>
+                  )}
                 </div>
               </div>
             </div>

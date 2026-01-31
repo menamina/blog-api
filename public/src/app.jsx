@@ -6,9 +6,9 @@ import "../css/app.css";
 
 function App() {
   const [posts, setPosts] = useState([]);
+  const [postOpen, setPostOpen] = useState(null);
   const [user, setUser] = useState(null);
   const [postErr, setPostErr] = useState(null);
-  const [postOpen, setPostOpen] = useState(null);
 
   useEffect(() => {
     async function verifyUser() {
@@ -65,18 +65,18 @@ function App() {
 
   return (
     <div className="grandDiv">
-      <Nav user={user} setUser={setUser} closePost={setPostOpen}></Nav>
+      <Nav user={user} setUser={setUser}></Nav>
       <div className="blog holder flex">
         <SideBar></SideBar>
         <Outlet
           context={{
             posts,
             setPosts,
+            postOpen,
+            setPostOpen,
             postErr,
             user,
             setUser,
-            postOpen,
-            setPostOpen,
           }}
         ></Outlet>
       </div>

@@ -252,8 +252,11 @@ async function getPostToEdit(req, res) {
   try {
     const { postID } = req.params;
     const numPostID = Number(postID);
-    const post = await prisma.post.findUnique({
+    const post = await prisma.posts.findUnique({
       where: { id: numPostID },
+      include: {
+        commentsOnThisPost: true,
+      },
     });
 
     if (!post) {
@@ -262,7 +265,7 @@ async function getPostToEdit(req, res) {
       res.json({ post });
     }
   } catch (error) {
-    console.log("error", error);
+    console.log("HELLO ERR", error);
   }
 }
 
@@ -330,9 +333,11 @@ async function deletePost(req, res) {
 async function deleteComments(req, res) {
   try {
     const { commentID, postID } = req.body;
+    const numComID = Number(commentID);
+    const numPostID = Number(postID);
 
     await prisma.comments.delete({
-      where: { id: Number(commentID), postID: Number(postID) },
+      where: { id: numComID, postID: numPostID },
     });
     res.status(201).json({
       message: "comment deleted",

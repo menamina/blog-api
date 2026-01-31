@@ -51,6 +51,10 @@ a:visited,
   font-family: "ranadeMed";
 }
 
+.nav {
+  margin-bottom: 40px;
+}
+
 .eclectic {
   font-size: 1.7rem;
   padding-bottom: 8px;
@@ -84,9 +88,45 @@ a:visited,
 .main {
   width: 73%;
   height: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 20px;
+}
+
+img {
+  width: 200px;
+  height: stretch;
+}
+
+.postDivflex {
+  display: flex;
+  height: 250px;
+  width: 100%;
+  border: 1px solid black;
+}
+
+.left.postDiv {
+  overflow: hidden;
+  border-right: 1px solid black;
+}
+
+.title {
+  font-size: 1.5rem;
+}
+
+.postData {
+}
+.line {
+  border-top: 1px solid gray;
+  padding-bottom: 20px;
+}
+
+.rightpostDiv {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
+  width: 60%;
+  padding: 8px;
 }
 
 /* below nav flex */
@@ -122,16 +162,6 @@ input {
   border-radius: 60px;
   border: none;
   cursor: pointer;
-}
-
-.main > form,
-.main > div {
-  width: 40%;
-  height: 100%;
-}
-
-.main > div {
-  text-align: center;
 }
 
 /* login + sign up */

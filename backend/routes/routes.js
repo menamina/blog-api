@@ -34,7 +34,7 @@ router.get(
   verifyToken,
   isAdmin,
   multer.single("image"),
-  remote.postToEdit,
+  remote.getPostToEdit,
 );
 router.put(
   "/edit-post/:postID",
