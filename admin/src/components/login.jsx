@@ -32,10 +32,8 @@ function Login() {
   return (
     <div className="main">
       {loginErrors ? (
-        <div>
-          {loginErrors.map((error) => {
-            <div>{error}</div>;
-          })}
+        <div className="error-message">
+          {loginErrors}
         </div>
       ) : null}
       <form onSubmit={login}>
